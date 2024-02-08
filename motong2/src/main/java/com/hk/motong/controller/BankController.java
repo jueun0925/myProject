@@ -31,7 +31,7 @@ public class BankController {
    
 	@GetMapping("/my_moim")
 	   public String bank_main(Model model,String pnum, HttpServletRequest request) {
-	      System.out.println("회비관리 페이지 이동");
+	      System.out.println("회비관리 페이지 이동"); 
 	      
 	      
 	    //---페이지번호 유지를 위한 코드----------------------
