@@ -25,7 +25,7 @@ import jakarta.servlet.http.HttpSession;
 public class BankController {
 
    @Autowired
-   private MoimService moimService;
+   private MoimService moimService; 
    @Autowired   
    private BankService bankService;
    
