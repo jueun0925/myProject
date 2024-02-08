@@ -20,7 +20,7 @@ import com.hk.motong.utils.Paging;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
-@Controller
+@Controller 
 @RequestMapping("/bank")
 public class BankController {
 
