@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/layout}">
+<head>
+<meta charset="UTF-8">
+<title>문의-글수정</title>
+<style type="text/css" >
+
+</style>
+<script type="text/javascript">
+	function updateEX(){
+		if(confirm("수정하시겠습니까?")){
+			return true;
+		}
+		return false
+	}
+</script>
+</head>
+<body>
+<div layout:fragment="content">
+<div class="container">
+<h1 th:onclick="|location.href='@{/ask/getAskList}'|">문의하기</h1>
+<hr/>
+	<form action="/ask/updateAskBoard" method="post" th:object="${updateAskCommand}" onsubmit="return updateEx()">
+	<input type="hidden" name="ask_seq" th:value="${adto.ask_seq}" />
+	<input type="hidden" name="ask_refer" th:value="${adto.ask_refer}" />
+	<table class="table">
+		<tr>
+			<th>제목</th>
+			<td>
+				<input type="text" name="ask_title" th:value="${adto.ask_title}" class="form-control" />
+				<span class="error" th:if="${#fields.hasErrors('ask_title')}" th:errors="*{ask_title}"></span>
+			</td>
+		</tr>
+		<tr>
+			<th>작성자[ID]</th>
+			<td style="color:blue;" th:text="${session.dto.id}" ></td>
+		</tr>
+		<tr>
+			<th>내용</th>
+			<td>
+				<textarea rows="10" cols="60" name="ask_content" th:text="${adto.ask_content}" class="form-control"> </textarea>
+				<span class="error"  th:if="${#fields.hasErrors('ask_content')}" th:errors="*{ask_content}"></span>
+			</td>
+		</tr>
+	</table>
+	<button type="button" class="btn" th:onclick="|location.href='@{/ask/detailAskBoard(ask_seq=${adto.ask_seq},ask_refer=${adto.ask_refer})}'|">본문보기</button>
+	<button type="submit" class="btn">수정하기</button>
+	</form>
+</div>
+</div>
+</body>
+</html>

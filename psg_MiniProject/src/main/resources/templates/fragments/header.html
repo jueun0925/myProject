@@ -1,0 +1,51 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>헤더</title>
+<style type="text/css">
+
+</style>
+<script type="text/javascript">
+$(function(){
+		
+});
+</script>
+</head>
+<body>
+<header th:fragment="header">
+	<div id="header">
+		<img id="menu-X" style="z-index:100; width:45px; height:45px; position: absolute; top: 12px; left:12px; display:none" th:src="@{/img/menu-X.png}" alt="메뉴열린상태"></img>
+		<img id="menu" style="width:50px; height:50px; position: absolute; top: 10px; left:10px;" th:src="@{/img/menu.png}" alt="메뉴닫힌상태"></img>
+		<a href="/" style="text-decoration: none; color:white; font-size: 32px; font-weight: bold;">
+			<img style="width:50px; height:50px;" th:src="@{/img/psg.png}" alt="psg로고"></img>
+			PSG KOREA FAN PAGE
+		</a>
+		
+		<th:block th:if="${session.dto==null}" > <!-- 로그인 안되어있으면 -->
+			<a th:href="@{/user/login}" style="text-decoration: none; color:white; position: absolute; right:60px;">로그인</a>	
+		</th:block>
+		<th:block th:unless="${session.dto==null}" > <!-- 로그인 되어있으면 -->
+			<th:block th:if="${session.dto.role=='ADMIN'}">
+							<a th:href="@{/user/getAllList}" class="info" style=" text-decoration: none; color:white; position: absolute; right:125px;">회원목록</a>
+			</th:block>
+			<th:block th:unless="${session.dto.role=='ADMIN'}">
+				<a th:href="@{/user/myInfo(id=${session.dto.id})}" class="info" style=" text-decoration: none; color:white; position: absolute; right:125px;">나의 정보</a>
+			</th:block>
+			<a th:href="@{/user/logout}" class="info" style="text-decoration: none; color:white; position: absolute; right:60px;">로그아웃</a>
+		</th:block>
+		
+		<a th:href="@{/user/login}"><img style="width:50px; height:50px; position: absolute; top: 10px; right:10px;" th:src="@{/img/login_png.png}" alt="로그인상태"></img></a>
+	</div>
+	<div id="whole-menu" style="display:none;">
+		<ul>
+            <li><a th:href="@{/calendar/calendar}">경기 일정</a></li>
+            <li><a th:href="@{/board/boardList(pnum=1)}">자유게시판</a></li>
+            <li><a th:href="@{/ask/getAskList(pnum=1)}">문의하기</a></li>
+		</ul>
+	</div>
+ </header>
+</body>
+</html>

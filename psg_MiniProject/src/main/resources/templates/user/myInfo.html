@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/layout}">
+<head>
+<meta charset="UTF-8">
+<title>나의 정보</title>
+<style type="text/css">
+
+</style>
+<script type="text/javascript">
+	function delUser(){
+		if(confirm("탈퇴하시겠습니까?")){
+			return true;
+		}
+		return false
+	}
+</script>
+</head>
+<body>
+<div layout:fragment="content">
+	<div class="container">
+		<h1>나의 정보</h1>
+		<hr/>
+		<div id="myinfo">
+		<form action="/user/deleteUser" method="post"  onsubmit="return delUser()" >
+			<input type="hidden" name="id" th:value="${dto.id}" />
+			<table class="table">
+				<tr>
+					<th>아이디</th>
+					<td th:text="${dto.id}"></td>
+				</tr>
+				<tr>
+					<th>이름</th>
+					<td th:text="${dto.name}"></td>
+				</tr>
+				<tr>
+					<th>주소</th>
+					<td th:text="${dto.address}"></td>
+				</tr>
+				<tr>
+					<th>이메일</th>
+					<td th:text="${dto.email}"></td>
+				</tr>
+				<tr>
+					<th>가입일</th>
+					<td th:text="${dto.regdate}"></td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<button type="submit" class="btn">회원탈퇴</button>
+						<button type="button" th:onclick="|location.href='@{/user/updateUserForm(id=${session.dto.id})}'|" class="btn">정보수정</button>
+					</td>
+				</tr>
+			</table>
+		</form>
+		</div>
+	</div>
+</div>
+</body>
+</html>

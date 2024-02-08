@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/layout}">
+<head>
+<meta charset="UTF-8">
+<title>회원가입</title>
+<style type="text/css">
+
+</style>
+<script type="text/javascript">
+	$(function(){
+	//click(),change()..는 정해진거만 처리
+	//on(),bind().. 이벤트핸들러함수
+		//on("eventType",function(){}) //keyup : 키보드 눌렀다가 뗐을때
+		$("input[name=id]").on("keyup",function(){
+			var id = $(this).val(); //id입력박스에 입력한 id값 가져오기 //js: value = jq: val()
+			//console.log(id);
+			$.ajax({
+				url: "/user/idChk",
+				method:"get",
+				dataType:"json",
+				async:false,
+				data:{"id":id},
+				success:function(data){
+					if(data.id != null){ //사용할수없는 id
+						//console.log("사용못함");
+						$("#idChk").attr("class","n").css("color","red").text("사용할 수 없는 아이디입니다");
+					}else{ //사용할수있는 id
+						//console.log("사용함");
+						$("#idChk").attr("class","y").css("color","red").text("사용가능한 아이디입니다");
+					}
+				},
+				error:function(){ alert("통신오류:"+e);}
+			});
+		});
+	});
+	
+	//중복된 아이디로 submit할 경우 처리
+	function submidChk(){
+		var classValue=$("#idChk").attr("class");
+		if(classValue=="n"){
+			alert("아이디를 확인하세요");
+			return false;
+		}
+		return true;
+	}
+</script>
+</head>
+<body>
+<div layout:fragment="content">
+	<div id="container">
+	<h1>회원가입</h1>
+	<hr></hr>
+		<form action="/user/addUser" method="post" th:object="${addUserCommand}" onsubmit="return submidChk()">
+			<table class="table" style="margin: 0px auto; width:800px; height:100px;">
+			<col width="100px" />
+			<col width="500px" />
+				<tr>
+					<th>아이디</th>
+					<td>
+						<input th:field="*{id}" type="text" class="form-control" name="id"/>
+						<span id="idChk" class="n"></span>
+						<span class="error" th:if="${#fields.hasErrors('id')}" th:errors="*{id}"></span>						
+					</td>
+				</tr>
+				<tr>
+					<th>비밀번호</th>
+					<td>
+						<input th:field="*{password}" type="password" class="form-control" name="password"/>
+						<span class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+					</td>
+				</tr>
+				<tr>
+					<th>이름</th>
+					<td>
+						<input th:field="*{name}" type="text" class="form-control" name="name"/>
+						<span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+					</td>
+				</tr>
+				<tr>
+					<th>이메일</th>
+					<td>
+						<input th:field="*{email}" type="email" class="form-control" name="email"/>
+						<span class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+					</td>
+				</tr>
+				<tr>
+					<th>주소</th>
+					<td>
+						<input th:field="*{address}" type="text" class="form-control" name="address"/>
+						<span class="error" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></span>
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:center;" colspan="2">
+						<button style="width:100px; height:40px;" type="submit" class="btn" >가입</button>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+</body>
+</html>

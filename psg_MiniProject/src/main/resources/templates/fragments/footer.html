@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+	
+</style>
+</head>
+<body>
+<footer th:fragment="footer">
+<div id="footer" >
+	<th:block th:if="${session.dto==null}" > <!-- 로그인 안되어있으면 -->
+		<span style="color:white; position: absolute; right:20px;">비회원입니다</span>	
+	</th:block>
+	<th:block th:unless="${session.dto==null}" > <!-- 로그인 되어있으면 -->
+		<span style="color:white; position: absolute; right:20px;">
+			<span th:text="${session.dto.name}"></span>[
+			<span th:text="${session.dto.role}"></span>]님 반갑습니다
+		</span>	
+	</th:block>
+</div>
+</footer>
+</body>
+</html>

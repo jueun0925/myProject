@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/layout}">
+<head>
+<meta charset="UTF-8">
+<title>회원목록 전체조회</title>
+<style type="text/css">
+
+</style>
+<script type="text/javascript">
+	function allSel(bool){
+		var chks=document.getElementsByName("chks");
+		for (var i = 0; i < chks.length; i++) {
+				if(chks[i].className=="admin"){
+					chks[i].checked=false;
+				}else{
+					chks[i].checked=bool;//각각의 체크박스에 체크여부를 true/false로 적용
+				}
+			
+		}
+	}
+	
+	function isCheck(){
+		if(confirm("정말 비활성화 하시겠습니까?")){
+			return true;
+		}
+		return false;
+	}
+	
+	$(function(){
+		$(".name").hover(function(){
+			$(this).css("color","red");
+		}, function(){
+			$(this).css("color","black");
+			});
+	});
+	
+</script>
+</head>
+<body>
+<div layout:fragment="content">
+	<div class="container">
+		<h1>회원목록 전체조회</h1>
+		<hr/>
+		<form action="/user/mulDel" method="post" th:object="${delUserCommand}" onsubmit="return isCheck()">
+			<table class="table">
+				<tr>
+					<th><input type="checkbox" name="all" onclick="allSel(this.checked)"/></th>
+					<th>회원번호</th>
+					<th>아이디</th>
+					<th>이름</th>
+					<th>이메일</th>
+					<th>가입일</th>
+					<th>등급</th>
+					<th>탈퇴 여부</th>
+				</tr>
+				<th:block th:if="${#lists.isEmpty(list)}">
+				<tr>
+					<td colspan="8" style="text-align:center;"> 가입한 회원이 없습니다.</td>
+				</tr>
+			</th:block>
+			<th:block th:unless="${#lists.isEmpty(list)}">
+				<tr th:each="dto:${list}">
+					<th:block th:if="${dto.role=='ADMIN'}">
+						<td><input class="admin" disabled="disabled" type="checkbox" name="chks" th:field="*{chks}" th:value="${dto.seq}"/></td>
+					</th:block>
+					<th:block th:unless="${dto.role=='ADMIN'}">
+						<td><input type="checkbox" name="chks" th:field="*{chks}" th:value="${dto.seq}"/></td>
+					</th:block>
+					<td th:text="${dto.seq}" ></td>
+					<td th:text="${dto.id}" ></td>
+					<td>
+						<a class="name" style="text-decoration: none; color:black; font-weight:bold;" th:href="@{/user/userDetail(id=${dto.id})}" th:text="${dto.name}"></a>
+					</td>
+					<td th:text="${dto.email}" ></td>
+					<td th:text="${#dates.format(dto.regdate,'yyyy-MM-dd')}"></td>
+					<td th:text="${dto.role}"></td>
+					<th:block th:if="${dto.enabled=='N'}">
+						<td style="color:red;" th:text="${dto.enabled}" ></td>
+					</th:block>
+					<th:block th:unless="${dto.enabled=='N'}">
+						<td style="color:blue;" th:text="${dto.enabled}" ></td>
+					</th:block>
+				</tr>
+			</th:block>
+			</table>
+			<button style="width:130px" type="submit" class="btn">회원비활성화</button>
+			<span th:if="${#fields.hasErrors('chks')}" th:errors="*{chks}"></span>
+		</form>
+	</div>
+</div>
+</body>
+</html>

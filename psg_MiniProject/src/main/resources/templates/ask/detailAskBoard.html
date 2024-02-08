@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/layout}">
+<head>
+<meta charset="UTF-8">
+<title>문의-상세보기</title>
+<style type="text/css" >
+
+</style>
+<script type="text/javascript">	
+
+$(function(){
+	$(".replyButton").click(function(){
+		
+		$(".AfterReplyButton").toggle();
+		
+	});		
+});
+
+</script>
+</head>
+<body>
+<div layout:fragment="content">
+<div class="container">
+<h1 th:onclick="|location.href='@{/ask/getAskList}'|">문의하기</h1>
+<hr/>
+	<table class="table">
+		<tr>
+			<th>제목</th>
+			<td style="font-size:15pt; font-weight:bold;" th:text="${adto.ask_title}"></td>
+		</tr>
+		<tr>
+			<th>작성자[ID]</th>
+			<td style="color:blue;" th:text="${adto.id}"></td>
+		</tr>
+		
+		<tr>
+			<th>내용</th>
+			<td>
+				<textarea rows="10" cols="60" name="content" th:text="${adto.ask_content}" class="form-control" readonly> </textarea>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2"></td>
+		</tr>
+	</table>
+	<button type="button" class="btn" th:onclick="|location.href='@{/ask/getAskList}'|">글목록</button>
+	<th:block th:if="${session.dto!=null}" > <!-- 로그인 되어있으면 -->
+		<th:block th:if="${session.dto.id==adto.id}">
+			<button type="button" class="btn" th:onclick="|location.href='@{/ask/updateAskBoardForm(ask_seq=${adto.ask_seq})}'|">글수정</button>
+			<button type="button" class="btn" th:onclick="|location.href='@{/ask/mulDelAsk(chk=${adto.ask_seq})}'|">삭제</button>
+		</th:block>
+		<th:block th:if="${session.dto.role=='ADMIN'}">
+			<button type="button" class="replyButton">답변하기</button>
+		</th:block>
+	</th:block>
+	<p></p>
+	<!-- 답변 다는 폼=관리자만 -->
+	<div class="AfterReplyButton" style="display:none;">
+	<form action="/ask/insertReply" method="post" th:object="${replyAskCommand}">	
+		<table id = "replyTable" class="table">
+		<th:block th:if="${session.dto!=null}" > <!-- 로그인 되어있으면 -->
+			<th:block th:if="${session.dto.role=='ADMIN'}">
+				<input type="hidden" name="id" th:value="${session.dto.id}" />
+			</th:block>
+		</th:block>	
+		<input type="hidden" name="ask_seq" th:value="${adto.ask_seq}" />			
+		<input type="hidden" name="ask_refer" th:value="${adto.ask_refer}" />
+		<input type="hidden" name="ask_step" th:value="${adto.ask_step}" />
+			<h2>답변하기</h2>
+			<tr>
+				<th>제목</th>
+				<td>
+					<input type="text" name="ask_rTitle" th:field="*{ask_rTitle}" class="form-control" />
+					<span class="error"  th:if="${#fields.hasErrors('ask_rTitle')}" th:errors="*{ask_rTitle}"></span>
+				</td>
+			</tr>
+			<tr>
+				<th>내용</th>
+				<td>
+					<textarea rows="10" cols="60" name="ask_rContent" th:filed="*{ask_rContent}" class="form-control"> </textarea>
+					<small><span class="error" th:if="${#fields.hasErrors('ask_rContent')}" th:errors="*{ask_rContent}"></span></small>
+				</td>	
+			</tr>
+			<tr>
+				<td colspan="2" style="text-align:right;">
+					<button class="btn" type="submit" text>등록</button>
+				</td>
+			</tr>
+		</table>
+		</form>
+		</div>
+	<!-- 답변 다는 폼 끝 -->
+
+	<!-- 문의글 답변 테이블 -->
+	<th:block th:if="${#lists.isEmpty(aList)}">
+	<table class="table">
+		<tr>
+			<td colspan="2" style="text-align: center;"> 작성된 답변이 없습니다.</td>
+		</tr>
+	</table>
+	</th:block>
+	<th:block th:unless="${#lists.isEmpty(aList)}">
+	<table class="table" th:each="aDto:${aList}">
+		<tr>
+			<th>제목</th>
+			<td style="font-size:15pt; font-weight:bold;" th:text="${aDto.ask_title}"></td>
+			<td style="text-align:right;">
+				<th:block th:if="${session.dto!=null}" > <!-- 로그인 되어있으면 -->
+					<th:block th:if="${session.dto.role=='ADMIN'}">
+						<input th:onclick="|location.href='@{/ask/replyDel(ask_seq=${adto.ask_seq},rAsk_seq=${aDto.ask_seq},ask_refer=${adto.ask_refer})}'|" 
+							class="replyInput" style="border:none; background-color:white; color:gray;" type="submit" value="답변 삭제"/>
+					</th:block>
+				</th:block>
+			</td>
+		</tr>
+		<tr>
+			<th>작성일</th>
+			<td colspan="2"  th:text="${#dates.format(aDto.ask_regdate,'yyyy-MM-dd')}"></td>
+		</tr>
+		<tr>
+			<th>내용</th>
+			<td colspan="2" >
+				<textarea rows="10" cols="60" name="content" th:text="${aDto.ask_content}" class="form-control" readonly> </textarea>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3">	
+			</td>
+		</tr>
+	</table>
+	</th:block>					
+	<!-- 문의글 답변 테이블 -->
+</div>
+</div>
+</body>
+</html>

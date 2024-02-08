@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/layout}">
+<head>
+<meta charset="UTF-8">
+<title>자유게시판</title>
+<style type="text/css" >
+	.active {
+		background-color:blue;
+		font-weight: bold; 
+	}
+	
+</style>
+<script type="text/javascript">
+	function diable(){
+		alert("회원만 글 작성이 가능합니다");
+		
+	}
+	
+	function isAllCheck(){
+		if(confirm("정말 삭제 하시겠습니까?")){
+			return true;
+		}
+		return false;
+	}
+	
+	function allSel(bool){
+		var chks=document.getElementsByName("chk");// [seq,seq,seq,seq..]
+		for (var i = 0; i < chks.length; i++) {
+			chks[i].checked=bool;//각각의 체크박스에 체크여부를 true/false로 적용
+		}
+	}
+	
+	$(function(){
+		$(".hehe").hover(function(){
+			$(this).css("background-color","lightgray");
+	},function(){
+		$(this).css("background-color","white");
+		});
+	});
+</script>
+</head>
+<body>
+<div layout:fragment="content">
+<div id="container">
+<h1 th:onclick="|location.href='@{/board/boardList}'|">자유게시판</h1>
+<hr/>
+<form action="/board/mulDel" method="post" th:object="${deleteBoardCommand}" onsubmit="return isAllCheck()">
+	<th:block th:if="${session.dto==null}" > <!-- 로그인 안되어있으면 -->
+		<button class="btn" type="button" th:onclick="diable()">글 작성</button>
+	</th:block>
+	<th:block th:unless="${session.dto==null}" > <!-- 로그인 되어있으면 -->
+		<th:block th:if="${session.dto.role=='ADMIN'}">
+			<button class="btn" type="submit">글 삭제</button>
+		</th:block>
+		<button class="btn" type="button"  th:onclick="|location.href='@{/board/insertBoardForm}'|">글 작성</button>
+			<br/><span class="error" th:if="${#fields.hasErrors('chk')}" th:errors="*{chk}"></span>
+	</th:block>
+	<p></p>
+	<table class="table">
+		<col width="50px" />
+		<col width="50px" />
+		<col width="500px" />
+		<col width="80px" />
+		<col width="80px" />
+		<col width="100px" />
+		<tr>
+			<th style="text-align:center;"><input type="checkbox" name="all" th:onclick="allSel(this.checked)"/></th>
+			<th style="text-align:center;"h>번호</th>
+			<th style="text-align:center;">제목</th>
+			<th style="text-align:center;">작성자</th>
+			<th style="text-align:center;">작성일</th>
+			<th style="text-align:center;">조회수</th>
+		</tr>
+		<th:block th:if="${#lists.isEmpty(list)}">
+			<tr>
+				<td colspan="6" style="text-align: center;"> 작성된 글이 없습니다.</td>
+			</tr>
+		</th:block>
+		<th:block th:unless="${#lists.isEmpty(list)}">
+			<tr class="hehe" th:each="dto:${list}">
+				<th:block th:if="${dto.delflag=='N'}">
+					<td colspan="6" style=" text-align:center; text-decoration:line-through ;">삭제된 글입니다.</td>
+				</th:block>
+				<th:block th:unless="${dto.delflag=='N'}">
+					<td style="text-align:center;"><input type="checkbox" name="chk" th:field="*{chk}" th:value="${dto.board_seq}"/></td>
+					<td style="text-align:center;" th:text ="${dto.board_seq}"></td>
+					<td>
+						&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+						<a style=" cursor:pointer; color:black;" th:href="@{/board/detailBoard(board_seq=${dto.board_seq},refer=${dto.refer})}" th:text="${@util.getTitle(dto.title)}"></a>
+					</td>
+					<td style="text-align:center;" th:text="${dto.id}" ></td>
+					<td style="text-align:center;" th:text="${#dates.format(dto.regdate,'yyyy-MM-dd')}"></td>
+					<td style="text-align:center;" th:text="${dto.readcount}" ></td>
+				</th:block>
+			</tr>
+		</th:block>					
+		<tr>
+			<td colspan="6" style="text-align: center;">
+					<!-- 페이징 처리부분 시작 -->
+		            <nav>
+		              <ul class="pagination">
+		                <li ><a th:href="@{/board/boardList(pnum=${pMap.prePageNum})}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+		                <th:block th:each="i:${#numbers.sequence(pMap.startPage,pMap.endPage)}">
+		                	
+		                		<li th:class="${session.pnum}==${i}?'active':''">
+		                			<a  th:href="@{/board/boardList(pnum=${i})}" th:text="${i}"><span class="sr-only">(current)</span></a>
+		                		</li>
+		                
+		                 </th:block>		               
+		                <li ><a th:href="@{/board/boardList(pnum=${pMap.nextPageNum})}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+		              </ul>
+		            </nav>
+		            <!-- 페이징 처리부분 종료 -->
+			</td>
+		</tr>	
+	</table>
+</form>
+</div>
+</div>
+</body>
+</html>

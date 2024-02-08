@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hk.board.mapper.UserMapper">
+	
+	<insert id="addUser" parameterType="userDto">
+		INSERT INTO USERTABLE
+		VALUES(NULL,#{id},#{name},#{password},#{address},#{email},'Y',#{role},SYSDATE())
+	</insert>
+	
+	<select id="idChk" parameterType="String" resultType="String">
+		SELECT ID FROM USERTABLE WHERE ID = #{id}
+	</select>
+	
+	<select id="login" parameterType="String" resultType="UserDto">
+		SELECT id, password,name, role,enabled
+		FROM usertable
+		WHERE id=#{id};
+ 
+	</select>
+	
+	<select id="myInfo" parameterType="String" resultType="UserDto">
+		 SELECT id,NAME,address,email,regdate
+		 FROM usertable
+		 WHERE id=#{id}
+	</select>
+	
+	<update id="updateUser" parameterType="userDto" >
+		 UPDATE usertable
+		 SET address=#{address} , email = #{email}
+		 WHERE id = #{id}
+	</update>
+	<update id="deleteUser" parameterType="String" >
+		UPDATE usertable 
+		SET enabled = 'N' 
+		WHERE id = #{id}
+	</update>
+	<select id="getAllList" resultType="userDto">
+		SELECT seq,id,NAME,email,regdate,ROLE,enabled
+		FROM usertable
+		ORDER BY seq DESC 
+	</select>
+	<select id="userDetail" parameterType="String" resultType="userDto">
+		SELECT seq,id,NAME, regdate, ROLE,enabled
+		FROM usertable
+		WHERE id=#{id}
+	</select>
+	<update id="updateUserRole" parameterType="Map">
+		UPDATE usertable
+		SET ROLE = #{role}, enabled =#{enabled}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="mulDel" parameterType="Map">
+		UPDATE usertable
+		SET enabled = 'N'
+		WHERE seq IN
+		<foreach collection="chks" item="seq" open="(" close=")"
+		         separator=",">
+			#{seq}
+		</foreach>
+	</update>
+</mapper>

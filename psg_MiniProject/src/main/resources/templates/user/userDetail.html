@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/layout}">
+<head>
+<meta charset="UTF-8">
+<title>회원정보조회</title>
+<style type="text/css">
+</style>
+<script type="text/javascript">
+</script>
+</head>
+<body>
+<div layout:fragment="content">
+	<div class="container">
+		<h1>회원 정보 조회</h1>
+		<hr/>
+		<table class="table">
+			<tr>
+				<th>회원번호</th>
+				<td th:text="${dto.seq}" ></td>
+			</tr>
+			<tr>
+				<th>아이디</th>
+				<td th:text="${dto.id}" ></td>
+			</tr>
+			<tr>
+				<th>이름</th>
+				<td th:text="${dto.name}" ></td>
+			</tr>
+			<tr>
+				<th>가입일</th>
+				<td th:text="${#dates.format(dto.regdate,'yyyy-MM-dd')}"></td>
+			</tr>
+			<tr>
+				<th>등급</th>
+				<td th:text="${dto.role}"  ></td>
+			</tr>
+			<tr>
+				<th>탈퇴여부</th>
+				<td th:text="${dto.enabled}" ></td>
+			</tr>
+		</table>
+		<button th:onclick="|location.href='@{/user/getAllList}'|" class="btn">회원목록</button>
+		<button th:onclick="|location.href='@{/user/updateUserRoleForm(id=${dto.id})}'|" class="btn" style="width:130px;">회원정보수정</button>
+	</div>
+</div>
+</body>
+</html>

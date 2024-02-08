@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.hk.board.mapper.CalMapper">
+
+	<select id="calViewList" parameterType="Map" resultType="CalDto">
+		SELECT rn,seq,title,score,content,mdate,regdate 
+		FROM (SELECT ROW_NUMBER() OVER(PARTITION BY SUBSTR(mdate,1,8)
+												 ORDER BY mdate) rn,seq,title,score,content,mdate,regdate
+				FROM caltable
+				WHERE SUBSTR(mdate,1,6)=#{yyyyMM})cal
+		WHERE rn BETWEEN 1 AND 3
+	</select>
+	
+	<insert id="insertCalBoard" parameterType="calDto">
+		INSERT INTO caltable
+		VALUES (NULL,#{title},#{score},#{content},#{mdate},SYSDATE())
+	</insert>
+	
+	<select id="detailCalBoard" parameterType="String" resultType="calDto">
+		SELECT seq,title,score,content,mdate,regdate
+		FROM caltable
+		WHERE SUBSTR(mdate,1,8) =#{yyyyMMdd}
+	</select>
+
+	<update id="updateCalBoard" parameterType="calDto">
+		UPDATE caltable
+		SET title=#{title},score=#{score},content=#{content},mdate=#{mdate},regdate=SYSDATE()
+		WHERE SUBSTR(mdate,1,8) =#{yyyyMMdd}
+	</update>
+
+	<delete id="deleteCalBoard" parameterType="String">
+		DELETE FROM caltable 
+		WHERE SUBSTR(mdate,1,8) =#{yyyyMMdd}
+	</delete>
+	
+	<select id="exitCal" parameterType="String" resultType="calDto">
+		SELECT *
+		FROM caltable
+		WHERE SUBSTR(mdate,1,8)="20231125"
+	</select>
+</mapper>

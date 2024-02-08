@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/layout}">
+<head>
+<meta charset="UTF-8">
+<title>나의 정보수정</title>
+<style type="text/css">
+
+</style>
+<script type="text/javascript">
+</script>
+
+</head>
+<body>
+<div layout:fragment="content">
+	<div class="container">
+		<h1>정보수정</h1>
+		<hr/>
+		<form action="/user/updateUser" method="post" th:object="${updateUserCommand}">
+			<input type="hidden" name="id" th:value="${dto.id}" />
+			<table class="table">
+				<tr>
+					<th>아이디</th>
+					<td th:text="${dto.id}"></td>
+				</tr>
+				<tr>
+					<th>이름</th>
+					<td th:text="${dto.name}"></td>
+				</tr>
+				<tr>
+					<th>주소</th>
+					<td>
+						<input th:value="${dto.address}" type="text" class="form-control" name="address"/>
+						<span class="error" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></span>
+					</td>
+				</tr>
+				<tr>
+					<th>이메일</th>
+					<td>
+						<input th:value="${dto.email}" type="email" class="form-control" name="email"/>
+						<span class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+					</td>
+				</tr>
+				<tr>
+					<th>가입일</th>
+					<td th:text="${dto.regdate}"></td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<button type="button" class="btn" th:onclick="|location.href='@{/user/myInfo(id=${session.dto.id})}'|">나의정보</button>
+						<button class="btn" type="submit" >수정하기</button>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+</body>
+</html>

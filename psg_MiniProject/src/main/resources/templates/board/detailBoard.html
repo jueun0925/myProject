@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/layout}">
+<head>
+<meta charset="UTF-8">
+<title>자유게시판-상세보기</title>
+<style type="text/css" >
+
+</style>
+<script type="text/javascript">
+function onlyMember(){
+		alert("회원만 댓글 작성이 가능합니다");
+	}
+	
+$(function(){
+	$(".rereply").click(function(){
+		
+		$(this).next().toggle();
+		$(this).parent().parent().siblings().each(function(){ 
+			$(this).children().eq(1).children("div").hide();
+		});
+	});
+
+		
+});
+</script>
+</head>
+<body>
+<div layout:fragment="content">
+<div class="container">
+<h1 th:onclick="|location.href='@{/board/boardList}'|">자유게시판</h1>
+<hr/>
+	<table class="table">
+		<tr>
+			<th>제목</th>
+			<td style="font-size:15pt; font-weight:bold;" th:text="${bdto.title}"></td>
+		</tr>
+		<tr>
+			<th>작성자[ID]</th>
+			<td style="color:blue;" th:text="${bdto.id}"></td>
+		</tr>
+		<tr>
+			<th>첨부사진</th>
+			<th:block th:if="${bdto.fileBoardDto[0].origin_filename==null}">
+				<td></td>
+			</th:block>
+			<th:block th:unless="${bdto.fileBoardDto[0].origin_filename==null}">
+				<td>
+					<th:block th:each="fdto:${bdto.fileBoardDto}">
+						<img style="width:300px;height:300px;" th:src="@{'/upload/'+${fdto.stored_filename}}"></img>&nbsp;&nbsp;
+					</th:block>
+				</td>
+			</th:block>
+		</tr>
+		<tr>
+			<th>내용</th>
+			<td>
+				<textarea rows="10" cols="60" name="content" th:text="${bdto.content}" class="form-control" readonly> </textarea>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2"></td>
+		</tr>
+	</table>
+	<button type="button" class="btn" th:onclick="|location.href='@{/board/boardList}'|">글목록</button>
+	<th:block th:if="${session.dto!=null}" > <!-- 로그인 되어있으면 -->
+		<th:block th:if="${session.dto.id==bdto.id}">
+			<button type="button" class="btn" th:onclick="|location.href='@{/board/updateBoardForm(board_seq=${bdto.board_seq})}'|">글수정</button>
+			<button type="button" class="btn" th:onclick="|location.href='@{/board/mulDel(chk=${bdto.board_seq})}'|">삭제</button>
+		</th:block>
+	</th:block>
+	<p></p>
+	<!-- 댓글 작성창 시작 -->
+	<table id = "replyTable" class="table">
+	<col width="80px" />
+	<col width="600px" />
+	<col width="30px" />
+	<col width="80px" />
+	<form action="/board/insertReply" method="post" th:object="${replyBoardCommand}">	
+	<th:block th:if="${session.dto!=null}" > <!-- 로그인 되어있으면 -->
+		<input type="hidden" name="id" th:value="${session.dto.id}" />
+	</th:block>
+		<input type="hidden" name="board_seq" th:value="${bdto.board_seq}" />
+		<input type="hidden" name="refer" th:value="${bdto.refer}" />
+		<input type="hidden" name="step" th:value="${bdto.step}" />
+		<tr>
+			<th>답글</th>
+			<td colspan="2">
+				<textarea rows="5" cols="20" name="reply" th:filed="*{reply}" class="form-control"> </textarea>
+				<small><span class="error" th:if="${#fields.hasErrors('reply')}" th:errors="*{reply}"></span></small>
+			</td>
+			<td>
+				<th:block th:if="${session.dto!=null}" > <!-- 로그인 되어있으면 -->
+					<input type="submit" value="등록"/>
+				</th:block>
+				<th:block th:unless="${session.dto!=null}" > <!-- 로그인 안되어있으면 -->
+					<input type="button" value="등록" onclick="onlyMember()"/>
+			</td>
+		</tr>
+	</form>
+	<!-- 댓글창 시작 -->
+		<th:block th:if="${#lists.isEmpty(rList)}">
+			<tr>
+				<td colspan="4" style="text-align: center;"> 작성된 답글이 없습니다.</td>
+			</tr>
+		</th:block>
+		<th:block th:unless="${#lists.isEmpty(rList)}">
+			<tr th:each="rDto:${rList}">
+				<th:block th:if="${rDto.delflag=='N'}"> <!--삭제된글이면-->
+					<td colspan="4" style="text-align:center;">삭제된 댓글입니다.</td>
+				</th:block>
+				<th:block th:unless="${rDto.delflag=='N'}"> <!--삭제된글이 아니면-->
+					<th:block th:if="${rDto.depth==1}"> <!-- 댓글이면 = depth=1 --> 
+						<td style="color:blue;" th:text="${rDto.id}" ></td> 
+						<td><!-- 댓글내용 -->
+							<p class="rereply" th:text="${rDto.content}" ></p>
+							<!-- 대댓다는 창-->
+							<div class="reply2-add" style="display:none;">
+								<form action="/board/insertReply2" method="post" th:object="${replyBoardCommand}">
+								<table class="table">
+								<th:block th:if="${session.dto!=null}" > <!-- 로그인 되어있으면 -->
+									<input type="hidden" name="id" th:value="${session.dto.id}" />
+								</th:block>
+									<input type="hidden" name="dolNum" th:value="${bdto.board_seq}" />
+									<input type="hidden" name="board_seq" th:value="${rDto.board_seq}" />
+									<input type="hidden" name="refer" th:value="${bdto.refer}" />
+									<input type="hidden" name="step" th:value="${rDto.step}" />
+								<tr>
+									<th>답글</th>
+									<td colspan="2">
+										<textarea rows="5" cols="20" name="reply" th:filed="*{reply}" class="form-control"> </textarea>
+										<small><span style="color:red;" th:if="${#fields.hasErrors('reply')}" th:errors="*{reply}"></span></small>
+									</td>
+									<td>
+										<th:block th:if="${session.dto!=null}" > 
+											<input type="submit" value="등록"/>
+										</th:block>
+										<th:block th:unless="${session.dto!=null}" >
+											<input type="button" value="등록" onclick="onlyMember()"/>
+										</th:block>
+									</td>
+								</tr>
+								</table>
+								</form>
+							</div>
+							<!-- 대댓다는 창 끝-->
+						</td>
+					</th:block>
+					<th:block th:unless="${rDto.depth==1}"> <!-- 대댓글이면 = depth>=2 --> 
+						<td style="color:blue;" th:text="${rDto.id}" ></td> 
+						<td><!-- 댓글내용 -->
+							&nbsp;&nbsp;&nbsp;&nbsp; 
+							<img th:src="@{/img/arrow_right.png}" alt="화살표"></img>
+							<span class="rereply" th:text="${rDto.content}" ></span>			
+						</td>
+					</th:block>
+						<th:block th:if="${session.dto!=null}" > <!-- 로그인 되어있으면 -->
+							<th:block th:if="${session.dto.id==rDto.id}"> <!-- 댓글쓴사람이랑 로그인한사람이랑 같으면-->
+								<td><a style="cursor:pointer;" th:href="@{/board/replyDel(board_seq=${bdto.board_seq},rboard_seq=${rDto.board_seq},refer=${bdto.refer})}"><small>삭제</small></a></td>			
+							</th:block>
+							<th:block th:unless="${session.dto.id==rDto.id}"> <!-- 댓글쓴사람이랑 로그인한사람이랑 다르면-->
+								<td></td>			
+							</th:block>
+						</th:block>
+						<th:block th:unless="${session.dto!=null}" > <!-- 로그인 안되어있으면 -->
+							<td></td>			
+						</th:block>
+						<td style="font-size:10pt;" th:text="${#dates.format(rDto.regdate,'yyyy-MM-dd')}"></td>
+				</th:block>			
+			</tr>
+			<tr><td colspan="4"></td></tr>	
+		</th:block>					
+	</table>
+</div>
+</div>
+</body>
+</html>

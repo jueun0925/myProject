@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/layout}">
+<head>
+<meta charset="UTF-8">
+<title>로그인</title>
+<script type="text/javascript">
+
+</script>
+<style type="text/css">
+
+</style>
+</head>
+<body>
+<div layout:fragment="content">
+	<div class="container" style="margin: auto; width:800px;">
+	<form action="/user/login" method="post" th:object="${loginCommand}">
+	<img style="margin: auto; display: block; width:300px; height:300px;" th:src="@{/img/login_png.png}" alt="로그인"></img>
+	<table class="table" style=" margin: 0px auto; width:500px; height:100px;">
+		<tr style="line-height:200px;">
+			<th >아이디</th>
+			<td>
+				<input  th:field="*{id}"  type="text" class="form-control" name="id"/>
+				<span class="error" th:if="${#fields.hasErrors('id')}" th:errors="*{id}"></span>							
+			</td>
+		</tr>
+		<tr>
+			<th>비밀번호</th>
+			<td>
+				<input th:field="*{password}" type="password" class="form-control" name="password"/>
+				<span class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+			</td>
+		</tr>
+		<tr><td colspan="2"></td></tr>
+	</table>
+	<div style="text-align:center;">
+		<button style=" width:240px; height:50px;" type="submit" >로그인</button>
+		<button style=" width:240px; height:50px;" type="button"  th:onclick="|location.href='@{/user/addUserForm}'|">회원가입</button>
+		<br/><span class="error" th:text="${msg}"></span>
+	</div>
+	</form>
+</div>
+</div>
+</body>
+</html>

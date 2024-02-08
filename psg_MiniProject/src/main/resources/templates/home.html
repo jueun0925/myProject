@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/layout}">
+<head>
+<meta charset="UTF-8">
+<title>Ice c'est Paris</title>
+<script type="text/javascript">
+
+</script>
+<style type="text/css">
+/*
+@keyframes myfirst{
+	0%{background-image: url("/img/iampsgfan.jpg"); width:1000px; height:610px;}
+	20%{background-image: url("/img/psg.jpg"); width:1000px; height:610px;}
+	40%{background-image: url("/img/iampsgfan.jpg"); width:1000px; height:610px;}
+	60%{background-image: url("/img/psg.jpg"); width:1000px; height:610px;}
+	80%{background-image: url("/img/iampsgfan.jpg"); width:1000px; height:610px;}
+	100%{background-image: url("/img/psg.jpg"); width:1000px; height:610px;}
+
+}
+.pasMainImg{
+	animation:myfirst 10s infinite; 
+}
+*/
+</style>
+</head>
+<body>
+<div style="margin:0px 0px;" layout:fragment="content">
+	<div id="container" style="margin:70px 0px; width:1500px" >
+		<div class="left" style="float:left;  display:inline-block; width:1000px; height:610px;"> <!-- position:absolute; top:70px; left:0px;-->
+<!--			<div class="pasMainImg"></div>-->
+			<img style="width:1000px; height:610px; " th:src="@{/img/iampsgfan.jpg}" alt="psg메인"></img>
+		</div>
+		
+		<div class="right" style="float:right; display:inline-block; width:400px; height:610px;"> <!-- position:absolute; top:70px; left:1000px;-->
+			<div style="margin:50px 0px; font-size: 48px; font-weight: bold;" >
+				<p>ICE C'EST</p>
+				<p>PARIS<img  th:src="@{/img/heart_icon.png}"></img></p>
+			</div>
+			<div style="height:100px" ></div>
+			<div style="font-size: 40px; font-weight: bold;">
+				<div>
+					<img class="arrow" th:src="@{/img/arrow.png}" />
+					<a th:href="@{/board/boardList(pnum=1)}" style="text-decoration: none; color:black;">게시판</a><!-- th:href="@{}"-->
+				</div>
+				<div>
+					<img class="arrow" th:src="@{/img/arrow.png}" />
+					<a th:href="@{/calendar/calendar}" style="text-decoration: none; color:black;">경기 일정</a> <!--th:href="@{/calendar/calendar}-->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

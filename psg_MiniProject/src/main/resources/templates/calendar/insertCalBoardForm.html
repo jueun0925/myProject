@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/layout}">
+<head>
+<meta charset="UTF-8">
+<title>경기일정추가</title>
+<style type="text/css" >
+
+</style>
+<script type="text/javascript">
+	function isAdd(){
+			if(confirm("추가하시겠습니까?")){
+				return true;
+			}
+			return false
+		}
+</script>
+</head>
+<body>
+<div layout:fragment="content">
+	<div id="container">
+	<h1>경기일정추가</h1>
+	<hr/>
+		<form action="/calendar/insertCalBoard" method="post" th:object="${insertCalCommand}" onsubmit="return isAdd()">
+			<table class="table">
+				<tr>
+					<th>일정 날짜</th>
+					<td>
+						<select name="year" >
+							<th:block th:each="i:${#numbers.sequence(insertCalCommand.year-5,insertCalCommand.year+5)}">
+								<th:block th:if="${insertCalCommand.year == i}">
+									<option th:value="${i}" th:text="${i}" selected="selected"></option>
+								</th:block>
+								<th:block th:unless="${insertCalCommand.year == i}">
+									<option th:value="${i}" th:text="${i}"></option>
+								</th:block>
+							</th:block>
+						</select>년
+						<select name="month" >
+							<th:block th:each="i:${#numbers.sequence(1,12)}">
+								<th:block th:if="${insertCalCommand.month == i}">
+									<option th:value="${i}" th:text="${i}" selected="selected"></option>
+								</th:block>
+								<th:block th:unless="${insertCalCommand.month == i}">
+									<option th:value="${i}" th:text="${i}"></option>
+								</th:block>
+							</th:block>
+						</select>월
+						<select name="date" >
+							<th:block th:each="i:${#numbers.sequence(1,31)}">
+								<th:block th:if="${insertCalCommand.date == i}">
+									<option th:value="${i}" th:text="${i}" selected="selected"></option>
+								</th:block>
+								<th:block th:unless="${insertCalCommand.date == i}">
+									<option th:value="${i}" th:text="${i}"></option>
+								</th:block>
+							</th:block>
+						</select>일
+						<select name="hour" >
+							<th:block th:each="i:${#numbers.sequence(0,23)}">
+								<option th:value="${i}" th:text="${i}" ></option>
+							</th:block>
+						</select>시
+						<select name="min" >
+							<th:block th:each="i:${#numbers.sequence(0,59)}">
+								<option th:value="${i}" th:text="${i}" ></option>
+							</th:block>
+						</select>분				
+					</td>
+				</tr>
+				<tr>
+					<th>일정제목</th>
+					<td>
+						<input th:field="*{title}" type="text" class="form-control" name="title"/>
+						<span class="error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+					</td>
+				</tr>
+				<tr>
+					<th>
+						경기스코어
+					</th>
+					<td>
+						<input type="text" class="form-control" name="score"/>
+					</td>
+				</tr>
+				<tr>
+					<th>경기내용</th>
+					<td>
+						<textarea class="form-control" rows="10" cols="60" name="content" th:field="*{content}"></textarea>
+						<span class="error" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></span>
+					</td>
+				</tr>
+			</table>
+				<button type="button" class="btn" th:onclick="|location.href='@{/calendar/calendar}'|">경기일정</button>
+				<button type="submit" class="btn">일정등록</button>
+		</form>
+	
+	</div>
+</div>
+</body>
+</html>

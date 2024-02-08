@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/layout}">
+<head>
+<meta charset="UTF-8">
+<title>회원정보수정</title>
+<style type="text/css">
+</style>
+<script type="text/javascript">
+	function updateEx(){
+		if(confirm("수정하시겠습니까?")){
+			return true;
+		}
+		return false
+	}
+</script>
+</head>
+<body>
+<div layout:fragment="content">
+	<div class="container">
+		<h1>회원 정보 수정</h1>
+		<hr/>
+		<form action="/user/updateUserRole" method="post" onsubmit="return updateEx()">
+		<input type="hidden" name="id" th:value="${dto.id}" />
+		<table class="table">
+			<tr>
+				<th>회원번호</th>
+				<td th:text="${dto.seq}" ></td>
+			</tr>
+			<tr>
+				<th>아이디</th>
+				<td th:text="${dto.id}" ></td>
+			</tr>
+			<tr>
+				<th>이름</th>
+				<td th:text="${dto.name}" ></td>
+			</tr>
+			<tr>
+				<th>가입일</th>
+				<td th:text="${#dates.format(dto.regdate,'yyyy-MM-dd')}"></td>
+			</tr>
+			<tr>
+				<th>등급</th>
+				<td>
+					<select name="role">
+						<th:block th:if="${dto.role == 'ADMIN'}">
+							<option value="ADMIN" th:text="ADMIN" selected="selected"></option>
+							<option value="USER" th:text="USER"></option>
+						</th:block>
+						<th:block th:unless="${dto.role == 'ADMIN'}">
+							<option value="ADMIN" th:text="ADMIN"></option>
+							<option value="USER" th:text="USER"  selected="selected" ></option>
+						</th:block>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<th>탈퇴여부</th>
+				<td >
+					<select name="enabled">
+						<th:block th:if="${dto.enabled == 'Y'}">
+							<option value="Y" th:text="Y" selected="selected"></option>
+							<option value="N" th:text="N"></option>
+						</th:block>
+						<th:block th:unless="${dto.enabled == 'Y'}">
+							<option value="Y" th:text="Y"></option>
+							<option value="N" th:text="N"  selected="selected" ></option>
+						</th:block>
+					</select>
+				</td>
+			</tr>
+		</table>
+		<button type="button" class="btn" style="width:130px;" th:onclick="|location.href='@{/user/userDetail(id=${dto.id})}'|" >회원정보 조회</button>
+		<button type="submit" class="btn">수정하기</button>
+		</form>
+	</div>
+</div>
+</body>
+</html>

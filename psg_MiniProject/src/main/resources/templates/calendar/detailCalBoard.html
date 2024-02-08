@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/layout}">
+<head>
+<meta charset="UTF-8">
+<title>일정 상세보기</title>
+<style type="text/css" >
+
+</style>
+<script type="text/javascript">
+
+</script>
+</head>
+<body>
+<div layout:fragment="content">
+	<div id="container">
+	<h1>일정상세보기</h1>
+	<hr/>
+		<table class="table">
+				<tr>
+					<th>일정 날짜</th>
+					<th:block th:if="${dto!=null}">
+						<td th:text="${@util.toDates(dto.mdate)}"></td>
+					</th:block>
+					<th:block th:unless="${dto!=null}">
+						<td th:text="${@util.toDates(fdate)}"></td>
+					</th:block>
+				</tr>
+				<tr>
+					<th>일정제목</th>
+					<th:block th:if="${dto!=null}">
+						<td th:text="${dto.title}"></td>
+					</th:block>
+					<th:block th:unless="${dto!=null}">
+						<td style="font-weight:bold;">일정없음</td>
+					</th:block>
+				</tr>
+				<tr>
+					<th>경기스코어</th>
+					<th:block th:if="${dto!=null}">
+						<td th:text="${dto.score}"></td>
+					</th:block>
+					<th:block th:unless="${dto!=null}">
+						<td></td>
+					</th:block>
+				</tr>
+				<tr>
+					<th>경기내용</th>
+					<th:block th:if="${dto!=null}">
+						<td>
+						<textarea class="form-control" rows="10" cols="60" name="content" th:text="${dto.content}" disabled="disabled"></textarea>
+						</td>
+					</th:block>
+					<th:block th:unless="${dto!=null}">
+						<td></td>
+					</th:block>
+				</tr>
+			</table>
+			<th:block th:if="${dto!=null}">
+				<th:block th:if="${session.dto!=null}" >
+					<th:block th:if="${session.dto.role=='ADMIN'}">
+						<button class="btn" th:onclick="|location.href='@{/calendar/calendar(year=${session.ymdMap.year}, month=${session.ymdMap.month})}'|">경기일정</button>
+						<button class="btn" th:onclick="|location.href='@{/calendar/updateCalBoardForm(year=${@util.getYYYY(dto.mdate)},month=${@util.getMM(dto.mdate)},date=${@util.getDD(dto.mdate)})}'|">일정 수정</button>
+						<button class="btn" th:onclick="|location.href='@{/calendar/deleteCalBoard(year=${@util.getYYYY(dto.mdate)},month=${@util.getMM(dto.mdate)},date=${@util.getDD(dto.mdate)})}'|">일정 삭제</button>					
+					</th:block>	
+					<th:block th:unless="${session.dto.role=='ADMIN'}">		
+						<button class="btn" th:onclick="|location.href='@{/calendar/calendar(year=${session.ymdMap.year}, month=${session.ymdMap.month})}'|">경기일정</button>
+					</th:block>		
+				</th:block>	
+				<th:block th:unless="${session.dto!=null}" >
+					<button class="btn" th:onclick="|location.href='@{/calendar/calendar(year=${session.ymdMap.year}, month=${session.ymdMap.month})}'|">경기일정</button>			
+				</th:block>	
+			</th:block>
+			<th:block th:unless="${dto!=null}">
+				<th:block th:if="${session.dto!=null}" >
+					<th:block th:if="${session.dto.role=='ADMIN'}">
+						<button class="btn" th:onclick="|location.href='@{/calendar/calendar(year=${session.ymdMap.year}, month=${session.ymdMap.month})}'|">경기일정</button>
+						<button class="btn" th:onclick="|location.href='@{/calendar/insertCalBoardForm(year=${@util.getYYYY(fdate)},month=${@util.getMM(fdate)},date=${@util.getDD(fdate)})}'|">일정추가</button>
+					</th:block>	
+					<th:block th:unless="${session.dto.role=='ADMIN'}">		
+						<button class="btn" th:onclick="|location.href='@{/calendar/calendar(year=${session.ymdMap.year}, month=${session.ymdMap.month})}'|">경기일정</button>
+					</th:block>		
+				</th:block>	
+				<th:block th:unless="${session.dto!=null}" >
+					<button class="btn" th:onclick="|location.href='@{/calendar/calendar(year=${session.ymdMap.year}, month=${session.ymdMap.month})}'|">경기일정</button>			
+				</th:block>	
+			</th:block>
+	</div>
+</div>
+</body>
+</html>

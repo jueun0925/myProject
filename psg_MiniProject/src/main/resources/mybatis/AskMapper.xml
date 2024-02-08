@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hk.board.mapper.AskMapper">
+	
+	<select id="detailAskBoard" parameterType="int" resultType="askDto">
+		SELECT ask_seq,id,ask_title,ask_content, ask_regdate,ask_refer,ask_step
+		FROM asktable
+		WHERE ask_seq=#{ask_seq}
+	</select>
+	
+	
+	<!-- 	useGeneratedKeys="true" keyProperty="board_seq"
+        : 증가된 board_seq값을 BoardDto에 전달 : BoardDto dto=insertBoard() -->
+	<insert id="insertAskBoard" parameterType="askDto"
+		useGeneratedKeys="true" keyProperty="ask_seq">
+		INSERT INTO asktable
+		VALUES(NULL, #{id},#{ask_title},#{ask_content},SYSDATE(),
+		(select	NVL(MAX(ask_refer),0)+1 FROM asktable alias_for_subquery),0,0,0,'Y'); 
+	</insert>	
+	
+	<update id="updateAskBoard" parameterType="askDto">
+		UPDATE asktable
+		SET ask_title=#{ask_title}, ask_content=#{ask_content}, ask_regdate = SYSDATE()
+		WHERE ask_seq=#{ask_seq}
+	</update>
+	
+	<update id="mulDelAsk" parameterType="Map">
+		UPDATE asktable SET ASK_DELFLAG = 'N' WHERE ASK_SEQ IN
+		<foreach collection="chks" item="ask_seq" open="(" close=")"
+		         separator=",">
+			#{ask_seq}
+		</foreach>
+	</update>
+	
+
+	
+	<select	id="getPCount" resultType="int">
+		SELECT CEIL(COUNT(*)/10) pageCount
+		FROM asktable
+		WHERE ask_depth=0
+	</select>
+	
+	<select id="getAskList" parameterType="Map" resultType="askDto">
+		SELECT rn,ask_seq,id,ask_title,ask_content, ask_regdate, 
+			ask_refer,ask_step,ask_depth,ask_readcount, ask_delflag
+		FROM(
+			SELECT ROW_NUMBER() OVER(ORDER BY ask_seq DESC,ask_regdate DESC) rn,ask_seq,id,ask_title,ask_content, ask_regdate, 
+				ask_refer,ask_step,ask_depth,ask_readcount, ask_delflag
+			FROM asktable WHERE ask_depth=0) a
+				
+		<where> <!-- 이게 sql에서의 where절임 -->
+			<choose>
+				<when test="ask_seq!=null">
+					ask_seq=#{ask_seq}
+				</when>
+				<otherwise>
+					ceil(rn/10) = #{pnum}				
+				</otherwise>
+			</choose>
+		</where>		
+	</select>
+	
+	<select id="replyList" parameterType="int" resultType="askDto">
+		SELECT ask_seq, ask_title,ask_content,id,ask_regdate, 
+			ask_refer,ask_step,ask_depth,ask_readcount, ask_delflag
+		FROM asktable
+		WHERE ask_depth >=1  AND ask_refer = #{ask_refer} AND ask_delflag = "Y"
+		ORDER BY ask_regdate
+		
+		
+	</select>
+	
+	<update id="replyUpdate" parameterType="askDto">
+		<![CDATA[ 
+			UPDATE asktable
+			SET ask_step=ask_step+1
+			WHERE ask_refer = (SELECT ask_refer FROM asktable WHERE ask_seq=#{ask_seq})
+			AND ask_step>(SELECT ask_step FROM asktable WHERE ask_seq=#{ask_seq});  		
+		]]>
+		
+	</update>
+	
+	<insert id="replyInsert" parameterType="askDto">
+		<![CDATA[ 
+			INSERT INTO asktable
+			VALUES(NULL,#{id},#{ask_title},#{ask_content},SYSDATE(),
+			(SELECT ask_refer FROM asktable alias_for_subquery WHERE ask_seq=#{ask_seq}),
+			(SELECT ask_step FROM asktable alias_for_subquery WHERE ask_seq=#{ask_seq})+1,
+			(SELECT ask_depth FROM asktable alias_for_subquery WHERE ask_seq=#{ask_seq})+1,0,'Y')
+			
+		]]>
+	</insert>
+</mapper>

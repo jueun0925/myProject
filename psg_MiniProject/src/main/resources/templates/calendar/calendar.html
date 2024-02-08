@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/layout}">
+<head>
+<meta charset="UTF-8">
+<title>경기일정</title>
+<style type="text/css" >
+
+/*     전체 레이아웃 */
+	.cal{
+		width: 100%; 
+		margin: 0 auto;
+		}
+	#thead{
+		margin-left:55px;
+	}
+	#tbody{
+		margin-left:50px;
+	}
+	.cal #thead > div{display: inline-block;
+						width: 143px;
+					 }
+					 
+	.cal #tbody > div{display: inline-block;
+						 width: 140px;
+					}
+					
+										 
+/*     날짜표현 div */
+    .cal #tbody > div{
+    	height: 120px;
+    	vertical-align: top;
+    	border-top:1px solid gray;
+    	position:relative;
+    }				
+    #ctitle{
+    	text-align: center;
+    	color:rgb(44, 62, 80);
+    	font-weight:bold;
+    	font-size : 30pt;
+    }			
+    
+    .pen{
+    	width: 20px;
+    	height: 20px;
+    }
+    .d{font-weight:bold;}
+    
+    #tbody > div > .clist{
+    	background-color : rgb(44, 62, 80);
+    	opacity : 0.9;
+    	color:white;
+  
+    	text-align:center;
+    }
+    
+    #tbody > div > .score{
+    	color : green;
+    	font-size : 15pt;
+    	font-weight:bold;
+    	text-align:center;
+    }
+
+    
+    .cp{
+    	position:absolute;
+    	left:20px;
+    	top:-30px;
+    	width:30px;
+    	height:30px;
+    	border-radius: 20px 30px 50px 1px;
+    	background-color :white;
+    	border:1px solid gray;
+    	line-height:30px;
+    	text-align:center;
+    	font-weight:bold;
+    }	
+</style>
+<script type="text/javascript">
+
+</script>
+</head>
+<body>
+<div layout:fragment="content">
+	<div id="container">
+		<div class="cal">
+			<div id="ctitle">
+				<a style="text-decoration: none; color:rgb(44, 62, 80);" th:href="@{/calendar/calendar(year=${calMap.year},month=${calMap.month-1})}"><</a>
+				<span class="y" th:text="${calMap.year}"></span>
+				<span>년</span>
+				<span class="m" th:text="${calMap.month}"></span>
+				<span>월</span>
+				<a style="text-decoration: none; color:rgb(44, 62, 80);" th:href="@{/calendar/calendar(year=${calMap.year},month=${calMap.month+1})}">></a>
+			</div>
+			<div id="thead">
+				<div>일</div><div>월</div><div>화</div><div>수</div>
+				<div>목</div><div>금</div><div>토</div>
+			</div>
+			<div id="tbody">
+				<th:block th:if="${calMap.dayOfWeek>1}">
+					<div th:each="num:${#numbers.sequence(1,calMap.dayOfWeek-1)}">&nbsp;</div>				
+				</th:block>
+				<th:block th:each="i:${#numbers.sequence(1,calMap.lastDay)}">
+					<div>
+						<a class="d" th:text="${i}"  th:style="'color:'+${@util.fontColor(i,calMap.dayOfWeek)}"
+						  th:href="@{/calendar/detailCalBoard(year=${calMap.year},month=${calMap.month},date=${i})}"> 
+						</a>
+						<th:block th:if="${session.dto!=null}" >
+							<th:block th:if="${session.dto.role=='ADMIN'}">
+								<a th:href="@{/calendar/insertCalBoardForm(year=${calMap.year},month=${calMap.month},date=${i})}">
+									<img class="pen" th:src="@{/img/pencil.png}" />
+								</a>						 
+							</th:block>				
+						</th:block>
+						<p></p>
+						<p class='clist' th:onclick="|location.href='@{/calendar/detailCalBoard(year=${calMap.year},month=${@util.isTwo(calMap.month)},date=${i})}'|">
+							[[(${@util.getCalViewList(i,clist)})]] </p>
+							
+						<p class="score">
+							[[(${@util.getScore(i,clist)})]]
+						</p>
+					</div>
+				</th:block>		
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>
