@@ -26,7 +26,7 @@ public class BankController {
 
    @Autowired
    private MoimService moimService;
-   @Autowired
+   @Autowired   
    private BankService bankService;
    
 	@GetMapping("/my_moim")
