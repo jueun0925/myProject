@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hk.motong.mapper.UserMapper">
+	
+
+	<insert id="addUser" parameterType="UserDto">
+		INSERT INTO USER
+		VALUES (NULL,#{email},#{password},#{name},#{phone},NULL,NULL,NULL)
+	</insert>
+
+	<select id="idChk" parameterType="String" resultType="String">
+		SELECT EMAIL FROM USER WHERE EMAIL = #{email}
+	</select>
+	
+	<select id="loginUser" parameterType="UserDto" resultType="UserDto">
+		SELECT * 
+		FROM USER 
+		WHERE EMAIL = #{email} 
+	</select>
+	
+	<select id="myInfo" parameterType="String" resultType="UserDto">
+		SELECT *
+		FROM user
+		WHERE EMAIL=#{email};
+	</select>
+	
+	<update id="updateMyInfo" parameterType="UserDto">
+		UPDATE user
+		SET NAME=#{name}, PASSWORD=#{password}, PHONE=#{phone}
+		WHERE EMAIL=#{email}
+	</update>
+	
+	<delete id="delUser" parameterType="String">
+		DELETE FROM user
+		WHERE EMAIL=#{email}
+	</delete>
+	
+	<update id="registToken" parameterType="UserDto">
+		UPDATE user
+		SET USERACCESSTOKEN = #{useraccesstoken}, USERREFRESHTOKEN = #{userrefreshtoken}, USERSEQNO = #{userseqno}
+		WHERE EMAIL=#{email}
+	</update>
+	
+	<insert id="registAccount" parameterType="AccountDto">
+		INSERT INTO account
+		VALUES (NULL, #{user_seq}, #{fintech_use_num}, #{account_num_masked},#{balance_amt}, #{bank_name},'N')
+	</insert>
+	
+	<select id="getAccountList" parameterType="int" resultType="AccountDto">
+		SELECT *
+		FROM account
+		WHERE user_seq= #{user_seq}
+	</select>
+	
+	<update id="updateBalanceAmt" parameterType="map">
+		UPDATE account
+		SET balance_amt = #{balance_amt}
+		WHERE account_seq = #{account_seq}
+	</update>
+
+	<delete id="deleteAccount" parameterType="int">
+		DELETE FROM account
+		WHERE account_seq = #{account_seq}
+	</delete>
+</mapper> 

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hk.motong.mapper.MoimMapper">
+   
+   <!--  나의 모임 목록 페이징 처리하기 -->   
+   <select id="getSubsCount" resultType="Integer">
+   	SELECT CEIL(COUNT(*)/10) pageCount
+	FROM user JOIN moim ON user.USER_SEQ = moim.LEADER
+		JOIN user_moim ON moim.MOIM_SEQ = user_moim.MOIM_SEQ
+   </select>
+   
+   <select id="subsMoim" parameterType="Map" resultType="MoimDto">
+    SELECT rn, moim_seq, leader, account_seq, MNAME, NAME
+	FROM ( SELECT ROW_NUMBER() over(ORDER BY moim.MOIM_SEQ) rn,
+             moim.MOIM_SEQ, moim.LEADER, moim.ACCOUNT_SEQ, moim.MNAME, user.NAME
+		   FROM user JOIN moim ON user.USER_SEQ = moim.LEADER
+				 	 JOIN user_moim ON moim.MOIM_SEQ = user_moim.MOIM_SEQ
+		   WHERE user_moim.USER_SEQ=#{user_seq}) a
+	WHERE ceil(rn/10) = #{pnum}
+   </select>
+<!--  나의 모임 목록 페이징 처리하기 끝 --> 
+
+	<select id="moimLeader" parameterType="Integer" resultType="String">
+		SELECT user.NAME
+		FROM user 
+		WHERE user.USER_SEQ IN (SELECT moim.leader
+				FROM user JOIN moim ON user.USER_SEQ = moim.LEADER
+				JOIN user_moim ON moim.MOIM_SEQ = user_moim.MOIM_SEQ
+				WHERE user_moim.USER_SEQ=#{user_seq});
+	</select>
+	
+	<select id="moimName" parameterType="Integer" resultType="String">
+		SELECT MNAME
+		FROM moim 
+		WHERE account_seq = #{account_seq};
+	</select>
+	
+	<!-- 모임리스트 -->
+	<select id="getPCount" resultType="int">
+		SELECT CEIL(COUNT(*)/10) pageCount 
+		FROM moim
+	</select>
+	
+	<select id="getMoimList" parameterType="String" resultType="MoimDto">
+		SELECT moim_seq,leader,account_seq,mname,pin,NAME
+		FROM (
+				SELECT ROW_NUMBER() over(ORDER BY moim_seq) rn,
+						 moim_seq,leader,account_seq,mname,pin,NAME
+				FROM moim LEFT OUTER JOIN user ON moim.leader = user.USER_SEQ) a
+		where CEIL(rn/10)=#{pnum}		
+	</select>
+
+	<select id="getMyAccountList" parameterType="Integer" resultType="MoimDto">
+		SELECT account_seq,account_num_masked, bank_name, delflag
+		FROM account
+		WHERE user_seq = #{user_seq}
+	</select>
+	
+	<!--  모임 추가할때 -->
+	<insert id="addMoim" parameterType="MoimDto">
+		INSERT INTO moim
+		VALUES (NULL, #{leader}, #{account_seq}, #{mname}, #{pin})
+	</insert>
+	
+	<select id="getMoimSeq" parameterType="int" resultType="int">
+		SELECT moim_seq
+		FROM moim
+		WHERE account_seq = #{account_seq}
+	</select>
+	
+	<insert id="addUserMoim" parameterType="Map">
+		INSERT INTO user_moim
+		VALUES (#{user_seq}, #{moim_seq})
+	</insert>
+	
+	<update id="updateAcDelflag" parameterType="Integer">
+		UPDATE account
+		SET delflag = 'Y'
+		WHERE account_seq = #{account_seq}
+	</update>
+	
+	<select id="moimSearch" parameterType="String" resultType="MoimDto">
+		SELECT moim.MOIM_SEQ, user.NAME, moim.ACCOUNT_SEQ, moim.MNAME, moim.PIN
+		FROM moim JOIN user ON moim.LEADER = user.USER_SEQ
+		WHERE MNAME LIKE CONCAT('%',#{searchData},'%')
+	</select>
+	
+	<select id="getMoim" parameterType="Integer" resultType="MoimDto">
+		SELECT moim.MOIM_SEQ, moim.MNAME, user.NAME, user.email, user.phone
+		FROM moim JOIN user ON moim.LEADER=user.USER_SEQ 
+		WHERE MOIM.MOIM_SEQ=#{moim_seq}
+	</select>
+	
+	<!--  모임원 목록 페이징 처리하기 -->
+	<select id="getGetMoimPCount" parameterType="Integer" resultType="Integer">
+		SELECT CEIL(COUNT(*)/10) pageCount
+		FROM user JOIN user_moim ON user.USER_SEQ=user_moim.USER_SEQ
+		WHERE MOIM_SEQ=#{moim_seq}
+	</select>
+	
+	<select id="moimUser" parameterType="Integer" resultType="UserDto">
+		SELECT rn,NAME, PHONE
+		FROM ( SELECT ROW_NUMBER() over(ORDER BY user.user_seq) rn,
+		             user.NAME, user.PHONE
+				 FROM user JOIN user_moim ON user.USER_SEQ=user_moim.USER_SEQ
+				 WHERE MOIM_SEQ= #{moim_seq}) a
+		WHERE ceil(rn/10) = #{pnum}
+	</select>
+<!--  모임원 목록 페이징 처리하기 끝 -->
+	
+	
+	
+	<select id="moimUserSeq" parameterType="Integer">
+		SELECT USER_SEQ
+		FROM user_moim
+		WHERE MOIM_SEQ=#{moim_seq}
+	</select>
+	
+	
+</mapper>
+ 
