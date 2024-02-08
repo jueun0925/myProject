@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>css07_box</title>
+<style type="text/css">
+	div{
+		background-color: rebeccapurple;
+	}
+	*{
+		margin:0px;
+	} /*사이트(?)가 잡고있는 기본 마진 빼는거 => 초기화*/
+	.box3{
+		padding: 10px;
+		margin:0 auto; /*auto값은 좌우 가운데 자동정렬*/
+		width: 800px; /*가운데 위치하려면 너비 조정이 필요*/
+	}
+	.box1, .box2{
+		background-color: cornflowerblue;
+		width: 300px;
+		height: 100px;
+		margin:20px;
+	}
+	.box1{
+		width: 220px;
+		padding: 20px;
+		border: 20px solid;
+		margin-left: -200px;
+	}
+	/*마우스 올라간 상태의 요소 선택*/
+	.box1:hover{
+		margin-left: 20px;
+	}
+	.box2{
+		text-align: center;
+		margin:0 auto;
+	}
+</style>
+</head>
+<body>
+<div class="box3">
+	<div class="box1">너비 300px</div>
+	<div class="box2">너비 300px</div>
+</div>
+</body>
+</html>

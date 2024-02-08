@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>css10_position</title>
+<style type="text/css">
+	#box{
+		width: 650px;
+		height: 400px;
+		background-color: beige;
+		position: relative;
+		margin:300px 300px;
+	}
+	p{
+		width: 200px;
+		height: 200px;
+		border: 1px solid black;
+		text-align: center;
+		line-height: 200px;
+		font-size: 30px;
+		border-radius: 100px;
+	}
+	.myred{
+		background-color: red;
+		position: absolute;
+		left: 250px;
+		top: 10px;
+		z-index: 100;
+	}
+	.myblue{
+		background-color: blue;
+		position: absolute;
+		left: 200px;
+		top: 100px;
+		z-index: 90;
+	}
+	.mygreen{
+		background-color: green;
+		position: absolute;
+		left: 300px;
+		top: 100px;
+		z-index: 80;
+	}
+	.myred:hover, .myblue:hover,.mygreen:hover{
+		z-index: 150;
+		color: 	aliceblue;
+		font-size: 40px;
+	}
+	/*메뉴만들기*/
+	li{
+		list-style: none;
+	}
+	.sub_menu{
+		display: none;
+		position: absolute;
+		left: 20px;
+		top: 2px;
+		z-index: 100;
+	}
+	.main_menu>li{
+		position: relative;
+		width: 150px;
+		margin-bottom: 5px;
+	}
+	.main_menu>li:hover>.sub_menu{
+		display: block;
+		cursor:pointer ;
+	}
+</style>
+</head>
+<body>
+<h1>position속성</h1>
+<div id="box">
+	<p class="myred">red</p>
+	<p class="myblue">blue</p>
+	<p class="mygreen">green</p>
+</div>
+<hr/>
+<h1>메뉴 만들기</h1>
+<div>
+	<ui class="main_menu">
+		<li>
+			<b>메뉴01</b>
+			<ul class="sub_menu">
+				<li>하위메뉴1</li>
+				<li>하위메뉴1</li>
+				<li>하위메뉴1</li>
+			</ul>
+		</li>
+		<li>
+			<b>메뉴02</b>
+			<ul class="sub_menu">
+				<li>하위메뉴4</li>
+				<li>하위메뉴5</li>
+				<li>하위메뉴6</li>
+			</ul>
+		</li>
+		<li>
+			<b>메뉴03</b>
+			<ul class="sub_menu">
+				<li>하위메뉴7</li>
+				<li>하위메뉴8</li>
+				<li>하위메뉴9</li>
+			</ul>
+		</li>
+	</ui>
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

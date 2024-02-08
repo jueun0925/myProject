@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>js12_Math객체</title>
+<style type="text/css" >
+	/*
+	#circle{
+		width: 200px;
+		height: 200px;
+		border: 1px solid black;
+		border-radius: 100px;
+	}
+	*/
+</style>
+<script type="text/javascript">
+	function randomNum(){
+		var rNum=Math.floor(Math.random()*256); //0~255까지의 랜덤숫자
+		document.getElementById("rnum").value=rNum;
+		return rNum;
+	}
+	
+	function randomBgColor(){
+		document.body.style.backgroundColor=`rgb(${randomNum()},${randomNum()},${randomNum()})`; //rgb(245,10,34)형식
+	}
+	
+	function circleView(){
+		var rNum=randomNum()+1;
+		var circle=document.getElementById("circle");
+		circle.style.width=rNum+"px";
+		circle.style.height=rNum+"px";
+		circle.style.border="1px solid black";
+		circle.style.borderRadius=rNum/2+"px";
+	}
+	
+	function circleArea(){
+		var circle=document.getElementById("circle");
+		var r2_px=circle.style.width; //원의 지름 -->200px 라는 값을 가져옴
+		var r2=r2_px.substring(0,r2_px.length-2); //px가 짤리고 수치값만 남음
+		var r = r2/2; //반지름
+		var area=Math.PI*(Math.pow(r,2));// r의 2제곱 x π //원의 넓이
+		var len=Math.PI*r2; //r x π //둘레
+		document.getElementById("area").textContent=Math.round(area)+"㎡"; //Math.round() : 소수점 아래 숫자 넘기기 
+		document.getElementById("len").textContent=Math.round(len)+"m";
+	}
+</script>
+</head>
+<body >
+<h1>랜덤숫자생성하기</h1>
+<input type="text" id="rnum" readonly="readonly"/><br/>
+<input type="button" value="숫자생성" onclick="randomNum()"/>
+<h1>랜덤으로 색상 생성하기</h1>
+<input type="button" value="바탕색 변경" onclick="randomBgColor()"/>
+<h1>원 만들기</h1>
+<input type="button" value="원생성" onclick="circleView()"/>
+<div id="circle">circle</div>
+<h1>원의 넓이와 둘레 구하기</h1>
+<input type="button" value="원의 크기" onclick="circleArea()"/>
+<span>원의 넓이:</span><span id="area"></span>
+<span>원의 둘레:</span><span id="len"></span>
+</body>
+</html>

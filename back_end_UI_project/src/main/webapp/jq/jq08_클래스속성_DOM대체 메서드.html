@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>parent("tr").attr("class","special");	</title>
+<style type="text/css" >
+	img{width: 300px; height: 300px;}
+	.onOffImg{display: none;}
+	.addSize{width: 400px; height: 400px;}
+</style>
+<script type="text/javascript" src="jquery_3.7.1.js"></script>
+<script type="text/javascript">
+	/*
+		class속성관련 메서드 4가지
+		-addClass():class속성을 엘리먼트에 추가
+		-removeClass():class속성을 엘리먼트에 삭제
+		-hasClass():class속성 존재여부
+		-toggleClass(): addClass()와 removeClass()를 동시 구현
+	*/ 
+	
+	$(function(){
+		$("#btn").click(function(){
+			$("img").toggleClass("onOffImg");
+		});
+		
+		$("img").click(function(){
+			if($(this).hasClass("addSize")){
+				$(this).removeClass("addSize");
+			}else{
+				$(this).addClass("addSize");
+			}
+		});
+		
+		//엘리먼트 대체 메서드
+		//타겟 요소를 새로운 요소로 대체하는 메서드
+		// - replaceWith() : 기능 동일
+		// - replaceAll() : 위 아래 함수 기능 동일/ 작성 방법이 다름
+		 
+		$("#btn2").click(function(){
+			//$("div>p").replaceWith("<strong>요소바꾸기</strong>"); //replaceWith
+			$("<strong>요소바꾸기</strong>").replaceAll("div>p");    //replaceAll
+		});
+		
+		
+		
+	});
+</script>
+</head>
+<body>
+<button id="btn">이미지 켜고 끄기</button>
+<img src="../html/img/코딱지.png"/>
+<img src="../html/img/코딱지.png"/>
+<img src="../html/img/코딱지.png"/>
+<hr/>
+<div>
+	<p>Dom대체 메서드</p>
+</div>
+<button id="btn2">바꾸기</button>
+</body>
+</html>

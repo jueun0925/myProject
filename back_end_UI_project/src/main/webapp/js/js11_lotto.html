@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title> </title>
+<style type="text/css" >
+
+</style>
+<script type="text/javascript"> 
+	//로또번호를 랜덤하게 1~45중에 하나를 생성하는 기능(함수)
+	//random():0~1사이의 실수를 랜덤하게 생성한다. --> 0.000..1~0.999999.. *45+1, 1*45=44.999
+	function makeBall(){
+		return Math.floor(Math.random()*45+1); //floor은 내림  //1~45사이 숫자 반환
+	}
+	
+	//생성된 번호를 배열에 저장하는 기능
+	function lottoBalls(){
+		var balls=new Array(); //생성된 번호를 저장할 배열 선언
+		var count=0;
+		
+		while(count<7){
+			var ball=makeBall();
+			if(balls.indexOf(ball)==-1){ //indexOf:검색한 단어가 존재하지 않으면 -1을 반환(존재여부 판단)
+				balls.push(ball);
+				count++;				
+			}
+		}
+		console.log(balls.toString());
+		return balls;
+	}
+	
+	function lottoPrint(){
+		//실습문제:정렬된 당첨번호 6개와 보너스 번호 1개 나눠서 화면에 출력(각각에 span요소 내부)
+		//      [1,2,3,4,5,6,7] -->마지막 번호가 보너스 번호임
+		//출력 형식:로또번호:1-5-16-19-22-36 보너스 번호:43 (예시임)
+		//배열에 관련된 메서드를 활용해서 구현
+		//6개와 1개 분리해서 출력, 정렬,포맷(형식) 
+		var balls7=lottoBalls();
+		var numArray = balls7.slice(0,6);
+		var bonusArray=balls7.slice(6,7);
+		numArray.sort((a,b)=>a-b);
+		
+		document.getElementById("num").innerHTML=numArray.join("-");
+		document.getElementById("bonus").innerHTML=bonusArray;
+		
+		///////////////////////위에는 내가 푼거 아래는 강사님 답안/////////////////////////////////////
+		/*
+		var balls7=lottoBalls();
+		var bonus=balls7.pop(); //pop():끝에서부터 잘라서 가져옴
+		var balls6 = balls7.sort((a,b)=>a-b);
+		var balls6Str=balls6.join("-");
+		document.getElementsByTagName("span")[1].innerHTML=`<strong>${balls6Str}</strong>`;
+		document.getElementsByTagName("span")[3].innerHTML=`<strong>${bonus}</strong>`;
+		*/
+	}
+</script>
+</head>
+<body>
+<fieldset>
+	<legend>로또번호 생성하기</legend>
+	<span>로또번호:</span>
+	<span id="num">1-5-16-19-22-36</span>&nbsp;&nbsp;&nbsp;&nbsp;
+	<span>보너스번호:</span>
+	<span id="bonus">43</span>
+	<button onclick="lottoPrint()">생성</button>
+</fieldset>
+</body>
+</html>

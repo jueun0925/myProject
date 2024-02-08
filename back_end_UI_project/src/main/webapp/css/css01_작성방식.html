@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>css01_작성방식.html</title>
+<!--<link rel="stylesheet" href="test.css" />-->
+<style type="text/css" >
+	/* 외부파일 연결은 link태그나 @import 사용하면 됨 */
+	@import url("test.css");
+	p{
+		color: blue;
+	}
+</style>
+</head>
+<body>
+<p style="color: red;" >in-line방식</p>
+<strong>요소 내부에 작성햔다.</strong>
+<p>내부 스타일 방식</p>
+<strong>head태그 내부에 style태그로 작성하는 방식.</strong>
+<p>외부 스타일 방식</p>
+<em>외부 css파일을 만들어서 작성하는 방식.</em>
+</body>
+</html>

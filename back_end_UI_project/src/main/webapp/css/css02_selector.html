@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>css02_selector.html</title>
+<style type="text/css" >
+	/*타입선택자*/
+	p{
+		width: 800px;
+		background-color: beige;
+		
+	}
+	strong{
+		color: cadetblue;
+	}
+	/*ID선택자*/
+	#a{		
+		background-color: aquamarine;
+	}
+	#b{
+		color: lightskyblue;
+	}
+	/*클래스 선택자*/
+	.p{
+		font-size: 25px;
+	}
+	
+	/*자식선택자*/
+	#container1 #a>strong{
+		color: indigo	}
+		
+	/*인접선택자*/
+	#container1 #c+p{
+		color: white;
+	}
+	
+	#container2 #c~p{
+		color: rgb(230,200,0);
+	}
+	/*속성선택자*/
+	#container2 p[class]{ /*속성이 존재하는지 여부로 선택*/
+		background-color: green;
+	}
+	#container2 h1[title='기사의 제목입니다.']{
+		background-color: blueviolet;
+	}
+	/*가상 선택자*/
+	a:link{
+		color: aqua;
+	}
+	a:visited{
+		color: hotpink;
+	}
+	a:active{ /*마우스로 누르고있을때*/
+		color: powderblue;
+	}
+	#container2 p:hover{ /*마우스가 올라간 상태*/
+		background-color: mediumslateblue;
+		cursor: pointer;
+		width: 500px;
+	}
+	
+	/*수도클래스 선택자*/
+	#container3 p:first-letter{
+		font-size: 40px;
+	}
+	#container3 p:first-line{
+		color: slategrey;
+	}
+	#container3 p:first-child{
+		background-color: greenyellow;
+	}
+	#container3 div>p:after{
+		content: "뒤에 가상의 요소가 있음";
+		color: palevioletred;
+	}
+</style>
+</head>
+<body>
+<div id="container1">
+	<h1 id="a">매달 <strong>50만원</strong> 부었더니…<strong>20년 뒤</strong> 月168만 '콸콸'</h1>
+	<h1>매달 <strong>50만원</strong> 부었더니…<strong>20년 뒤</strong> 月168만 '콸콸'</h1>
+	<p>
+	매달 50만원씩 투자했을 때 <strong id="b" >20년 후</strong> 기대할 수 있는 은퇴 자금은 얼마일까? 
+	한국판 SCHD(Schwab US Dividend Equity ETF)로 불리는 ACE 미국배당 다우존스 ETF(상장지수펀드)로 시뮬레이션해 본 결과 5억3700여만원으로 산출됐다. 원금은 1억2000여만원, 수익은 원금의 3배 넘는 4억1700여만원이다. 20년 후 매달 최대 168만원의 분배금을 받을 수 있는 셈이다.
+	</p>
+	<p class="p" id="c">
+	과거 20년 성과를 기반으로 추정한 것으로 월 분배금을 재투자해 복리 효과를 극대화한 결과다. 
+	물론 향후 주가 흐름에 따라 달라지겠지만 장기간 안정적이고 꾸준한 주가 흐름을 보여온 주식을 
+	고르는 기준이 그대로인 만큼 현명한 선택지일 수 있다. 이에 따라 최근 고배당 ETF,  
+	특히 다우존스 U.S Dividend 100 Price return(다우존스 미국배당 100) 지수를 추종하는 일명 한국판 SCHD ETF들이 시장의 주목을 받는다.
+	</p>
+	<p class="p" >
+	한국투자신탁운용의 ACE미국배당 다우존스는 국내에 가장 먼저 상장된 '한국판 SCHD'다. 
+	2021년 10월 상장돼 약 2여년간 안정적으로 운용됐다. 이 기간 주가 상승률은 5.3%(연 2.9%), 분배금은 연 3% 수준을 넘는다.
+	</p>
+	<p class="p" >
+	한국투자신탁운용의 ACE미국배당 다우존스는 국내에 가장 먼저 상장된 '한국판 SCHD'다. 
+	2021년 10월 상장돼 약 2여년간 안정적으로 운용됐다. 이 기간 주가 상승률은 5.3%(연 2.9%), 분배금은 연 3% 수준을 넘는다.
+	</p>
+</div>
+<hr/>
+<div id="container2">
+	<h1 id="a">매달 <strong>50만원</strong> 부었더니…<strong>20년 뒤</strong> 月168만 '콸콸'</h1>
+	<h1 title="기사의 제목입니다." >매달 <strong>50만원</strong> 부었더니…<strong>20년 뒤</strong> 月168만 '콸콸'</h1>
+	<p>
+	매달 50만원씩 투자했을 때 <strong id="b" >20년 후</strong> 기대할 수 있는 은퇴 자금은 얼마일까? 
+	한국판 SCHD(Schwab US Dividend Equity ETF)로 불리는 ACE 미국배당 다우존스 ETF(상장지수펀드)로 시뮬레이션해 본 결과 5억3700여만원으로 산출됐다. 원금은 1억2000여만원, 수익은 원금의 3배 넘는 4억1700여만원이다. 20년 후 매달 최대 168만원의 분배금을 받을 수 있는 셈이다.
+	</p>
+	<p class="p" id="c">
+	과거 20년 성과를 기반으로 추정한 것으로 월 분배금을 재투자해 복리 효과를 극대화한 결과다. 
+	물론 향후 주가 흐름에 따라 달라지겠지만 장기간 안정적이고 꾸준한 주가 흐름을 보여온 주식을 
+	고르는 기준이 그대로인 만큼 현명한 선택지일 수 있다. 이에 따라 최근 고배당 ETF,  
+	특히 다우존스 U.S Dividend 100 Price return(다우존스 미국배당 100) 지수를 추종하는 일명 한국판 SCHD ETF들이 시장의 주목을 받는다.
+	</p>
+	<p class="p" >
+	한국투자신탁운용의 ACE미국배당 다우존스는 국내에 가장 먼저 상장된 '한국판 SCHD'다. 
+	2021년 10월 상장돼 약 2여년간 안정적으로 운용됐다. 이 기간 주가 상승률은 5.3%(연 2.9%), 분배금은 연 3% 수준을 넘는다.
+	</p>
+	<p >
+	<a href="https://www.pinterest.co.kr/search/pins/?q=%EC%9D%B4%EA%B0%95%EC%9D%B8&rs=typed">한국투자신탁운용</a>의 ACE미국배당 다우존스는 국내에 가장 먼저 상장된 '한국판 SCHD'다. 
+	2021년 10월 상장돼 약 2여년간 안정적으로 운용됐다. 이 기간 주가 상승률은 5.3%(연 2.9%), 분배금은 연 3% 수준을 넘는다.
+	</p>
+</div>
+<hr/>
+<div id="container3">
+<!--	<p>이강인 밥은 먹었냐/ 자식요소 중에서 첫번째 요소가 p태그인 요소를 선택한다.</p>-->
+	<h1 id="a">매달 <strong>50만원</strong> 부었더니…<strong>20년 뒤</strong> 月168만 '콸콸'</h1>
+	<h1 title="기사의 제목입니다." >매달 <strong>50만원</strong> 부었더니…<strong>20년 뒤</strong> 月168만 '콸콸'</h1>
+	<div>
+		<p>
+		매달 50만원씩 투자했을 때 <strong id="b" >20년 후</strong> 기대할 수 있는 은퇴 자금은 얼마일까? 
+		한국판 SCHD(Schwab US Dividend Equity ETF)로 불리는 ACE 미국배당 다우존스 ETF(상장지수펀드)로 시뮬레이션해 본 결과 5억3700여만원으로 산출됐다. 원금은 1억2000여만원, 수익은 원금의 3배 넘는 4억1700여만원이다. 20년 후 매달 최대 168만원의 분배금을 받을 수 있는 셈이다.
+		</p>
+		<p class="p" id="c">
+		과거 20년 성과를 기반으로 추정한 것으로 월 분배금을 재투자해 복리 효과를 극대화한 결과다. 
+		물론 향후 주가 흐름에 따라 달라지겠지만 장기간 안정적이고 꾸준한 주가 흐름을 보여온 주식을 
+		고르는 기준이 그대로인 만큼 현명한 선택지일 수 있다. 이에 따라 최근 고배당 ETF,  
+		특히 다우존스 U.S Dividend 100 Price return(다우존스 미국배당 100) 지수를 추종하는 일명 한국판 SCHD ETF들이 시장의 주목을 받는다.
+		</p>
+		<p class="p" >
+		한국투자신탁운용의 ACE미국배당 다우존스는 국내에 가장 먼저 상장된 '한국판 SCHD'다. 
+		2021년 10월 상장돼 약 2여년간 안정적으로 운용됐다. 이 기간 주가 상승률은 5.3%(연 2.9%), 분배금은 연 3% 수준을 넘는다.
+		</p>
+		<p >
+		<a href="https://www.pinterest.co.kr/search/pins/?q=%EC%9D%B4%EA%B0%95%EC%9D%B8&rs=typed">한국투자신탁운용</a>의 ACE미국배당 다우존스는 국내에 가장 먼저 상장된 '한국판 SCHD'다. 
+		2021년 10월 상장돼 약 2여년간 안정적으로 운용됐다. 이 기간 주가 상승률은 5.3%(연 2.9%), 분배금은 연 3% 수준을 넘는다.
+		</p>
+	</div>
+</div>
+</body>
+</html>
+
+
+
+
+
+
+

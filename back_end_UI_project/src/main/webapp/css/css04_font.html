@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>css04_font.html</title>
+<style type="text/css">
+	#p1{
+		font-size: 20px;
+		font-weight: bold;
+		font-style:italic;
+		font-variant: small-caps; /*소문자를 작은 대문자로 변경*/
+		line-height: 50px;/*줄간격*/
+		font-family: '맑은 고딕' '굴림';
+		
+	}
+	
+	h1{
+		background-color: yellow;
+		height: 200px;
+		text-align: center;
+		/*위아래정렬*/
+		/*vertical-align: middle; 원래 이건데 이게 안먹힘 그래서 밑에처럼 (한줄일때만)*/
+		line-height: 200px;
+	}
+	/*
+	1 font:[font-weight font-style font-variant]
+	2 font:[font-size/line-height]
+	3 font:[font-family]
+	-->font: 1 2 3 순으로 작성
+	p{font:font-style font-sixe/line-height font-family}
+	*/
+	
+	#p2{
+		font:bold italic small-caps 20px/50px '맑은 고딕'	;
+		}
+</style>
+</head>
+<body>
+<h1>폰트 관련 속성</h1>
+<p id="p1" >psg-lee kangin
+이강인은 최근 방탄소년단 유튜브 채널 방탄tv '슈취타(슈가와 취하는 타임)'에 게스트로 출연해 "태어나서 술을 마셔본 적이 없다"고 말했다. 
+슈취타는 방탄소년단 멤버 슈가와 초대 받은 게스트가 술자리에서 진솔한 이야기를 나누는 프로그램이다. 
+이 자리에서 이강인이 술을 마시지 않는다고 밝혔다.
+</p>
+<P id="p2">
+jueuni 실제로 이강인은 이번 프로그램에서도 술 대신 평소 즐겨 마신다는 청포도 에이드를 들었다.
+</p>
+</body>
+</html>

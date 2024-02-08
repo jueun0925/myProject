@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>html04_이미지요소.html</title>
+</head>
+<body>
+<h1>이미지 요소</h1>
+<p>이미지 요소는 이미지를 웹 페이지에 표현할때 <br/>
+	사이즈 조절을 할 떄 해상도를 고려해야된다
+</p>
+
+<p>
+<img src="img/코딱지.png" />
+<a href="https://www.youtube.com/watch?v=r89e1uaCjdQ&t=115s">
+	<img height="200px" width="200px" src="img/코딱지.png" alt="강아지이미지입니다. 이미지를 클릭하면 해당 사이트로 이동합니다" />
+<a/>
+</p>
+
+<hr/>
+<h1>이미지 맵 사용하기</h1>
+<img src="img/menu.jpeg" alt="중국집 메뉴입니다" usemap="#menu"/>
+<map name="menu" >
+		<area alt="해물볶음짬뽕" 
+			  href="https://www.10000recipe.com/recipe/6942798" 
+			  shape="rect"
+			  coords="0,1,162,155"
+			  target="_balnk"  
+		/>
+		<area alt="삼선볶음밥" 
+			  href="https://post.naver.com/viewer/postView.nhn?volumeNo=26858735&memberNo=17368892" 
+			  shape="rect"
+			  coords="527,327,696,481"
+			  target="_balnk"  
+		/>
+		<!-- target = "_blank" : 새로운 페이지 열어서 링크연결 -->
+</map>
+
+<hr/>
+<h1>링크요소와 target사용하기</h1>
+<a target="tt" href="https://www.10000recipe.com/recipe/6942798">이동</a>
+<iframe name="tt" src="html03_텍스트관련요소.html" style="height: 500px; width: 500px;"></iframe>
+
+</body>
+</html>

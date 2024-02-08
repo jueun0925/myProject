@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>js22_domcreate_활용</title>
+<style type="text/css" >
+	img{
+		width: 300px;
+		height: 200px;
+		vertical-align: middle;
+	}
+	a{
+		text-decoration: none;
+		font-size: 40px;
+	}
+</style>
+<script type="text/javascript">
+	function createImg(){
+		//라디오 버튼을 탐색해서 선택된 버튼의 값(value속성)을 구하기
+		var rdo=document.getElementsByName("rbtn");
+		var val="";
+		//1번 방법:라디오버튼 모두 구해서 하나하나 각각 체크여부 확인해서 값 구하기
+		/*
+		for(var i=0;i<rdo.length;i++){
+			if(rdo[i].checked){
+				val=rdo[i].value;
+				break;
+			}
+		}
+		*/
+		//2번 방법: selecot표현식으로 체크된 상태의 요소 구하기
+		val=document.querySelector("input:checked").value;
+		console.log(val);
+		
+		//태그 생성하는 코드
+		var img=document.createElement("img");
+		img.setAttribute("src",val); //img태그 내부에src속성의 이미지 경로 넣어주기
+		
+		
+		var imgView=document.getElementById("imgView");
+		//문제점:appendChild를 사용하면 기존의 요소가 남아있으면서 새로운 요소가 추가
+		imgView.innerHTML=""; //내부요소 지우기
+		imgView.appendChild(img); //추가하기
+	}
+	
+	/*
+		속성에 관련된 메서드 정리
+		1.setAttribute("속성이름","값"):속성을 엘리먼트에 추가(리터럴)
+		2.setAttributeNode(Attr name):속성을 엘리먼트에 추가(객체) //객체만 참조 가능
+		3.getAttribute("name"):"name"속성의 값을 가져온다
+		4.hasAttribute("name"):"name"속성이 존재하는지 여부 (true/false)
+	*/
+	
+	onload=function(){
+		//a태그 객체 정의
+		var anchs=document.getElementsByTagName("a"); //[a태그,a태그]
+		var img=document.getElementsByTagName("a")[0].nextElementSibling;  //img태그
+		console.log("img요소에 alt속성이 있는지 여부:"+img.hasAttribute("alt"));
+		var count=0;
+		//왼쪽 a태그 클릭했을떄
+		anchs[0].onclick=function(){
+			//title속성에 접근해서 값을 확인
+			var imgTitle=img.getAttribute("title"); //title속성 값 가져오기
+			if(imgTitle=="img0"){
+				alert("첫번째이미지 입니다")
+			}else{
+				img.setAttribute("src", "img/"+(--count)+".jpg"); //count감소시킨거 바로적용
+				img.setAttribute("title", "img"+(count)); 
+			}
+		}
+		//오른쪽 a태그 클릭했을떄
+		anchs[1].onclick=function(){
+			var imgTitle=img.getAttribute("title"); //title속성 값 가져오기
+			if(imgTitle=="img2"){
+				alert("마지막이미지 입니다")
+			}else{
+				img.setAttribute("src", "img/"+(++count)+".jpg"); //count증가시킨거 바로적용
+				img.setAttribute("title", "img"+(count)); 
+			}
+		}
+	}
+
+</script>
+</head>
+<body>
+<h1>선택된 목록에 해당하는 이미지 보여주기</h1>
+<input type="radio" name="rbtn" value="img/0.jpg"/><label>자장면</label>
+<input type="radio" name="rbtn" value="img/1.jpg"/><label>치킨</label>
+<input type="radio" name="rbtn" value="img/2.jpg"/><label>떡볶이</label>
+<button onclick="createImg()">이미지 생성</button>
+<div id="imgView"></div>
+
+<h1>화살표 방향에 따라 이미지가 바뀌는 기능</h1>
+<div>
+	<a href="#" id="lt">◀</a>
+	<img src="img/0.jpg" title="img0" alt="음식사진"/>
+	<a href="#" id="rt">▶</a>
+</div>
+</body>
+</html>

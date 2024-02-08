@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>js07_객체_함수사용</title>
+<style type="text/css" >
+
+</style>
+<script type="text/javascript">
+	//선언적함수사용:function키워드를 사용하여 정의, 이름이 있다..
+	//			다른 객체에서 호출을 할 수 있다-->재사용가능
+	//          파라미터의 개수만큼 작성해서 호출할 필요 없다. func(a,b) -->func()
+	//          리턴값이 없을 수 있다. return;
+	function func01(){
+		console.log("선언적함수");
+		func01_2(10,"20"); //파라미터 전달
+		var val=func01_2(); //함수에서 파라미터를 사용하지 않는다면 전달하지 않고도 호출가능
+		console.log(val);
+	}
+	function func01_2(val01,val02){ //매개변수 정의
+		console.log("함수2");
+		return "값";
+	}
+	
+	
+	//익명함수:객체 내부에서 사용되고 종료-->이름이 없기떄문에 다른 객체에서 호출x
+	//		변수에 저장해서 변수이름으로 호출가능 : 변수명()
+	//		파라미터로 기능을 전달할떄 익명함수로 가능하다.
+	//		ES6에서 추가된 화살표 함수(표현방식 단순화)
+	var i=0;
+	var func02=function(){
+		console.log("익명함수");
+		
+		
+		//window.setInterval(function(){},1000);//1000이 1초//기능을 1초 간격으로 계속 실행
+		//setInterval(function(){console.log(i++);},2000);
+		
+		setInterval(test,1000); //선언적함수로도 전달 가능 --> 함수 이름만 작성 //괄호붙이면 바로 실행이 되버려서
+		//setInterval("test()",1000);                     //괄호붙일거면 "" 안에
+	}
+	function test(){
+		console.log(i++);
+	}
+	
+	
+	
+	//onload는 페이지가 로딩될때 실행
+	onload=function(){
+		document.getElementsByTagName("h1")[1].onclick=function(){
+			console.log("익명함수활용");
+		}
+		//1.객체 리터럴 방식(json활용)
+		document.getElementsByClassName("a")[0].onclick=function(){
+			//리터럴:값 자체 의미 --> var a=5; var b=a;
+//			var array=[1,2,3,4,5]; //배열 선언시 리터럴 방식
+			var jsonObj={
+				subject:"javascript",
+				credit:1,
+				printout:function(){
+					return jsonObj.subject+","+jsonObj.credit+"학점";
+				}
+			}
+			//객체에 정의된 메서드 호출
+			console.log(jsonObj.printout());
+			//함수 호출 시 이름만 쓰는경우, 괄호까지 쓰는 경우
+			//			기능 실행 x  , 기능 실행
+			printCredit(jsonObj.printout);
+			
+			//객체의 값을 변경하는 경우
+			jsonObj.subject="JS"; //set
+			jsonObj["test"]="value"; //add
+//			delete jsonObj["credit"]; //delete
+			//객체에 변경된 값 확인
+			console.log(jsonObj.subject+","+jsonObj.test); //값이 변경됨
+			
+			//ES6에서 추가된 기능
+			//1.화살표함수
+			//jsonObj["arrowFunc"]=function(){}
+			//jsonObj["arrowFunc"]=()=>{}
+			jsonObj["arrowFunc"]=(val1,val2)=>{console.log("화살표함수");};
+			jsonObj.arrowFunc(1,2);
+			
+			//2.구조분해할당 기능
+//			let subject=jsonObj.subject;
+//			let credit=jsonObj.credit;
+		
+			let {subject,printout}=jsonObj;
+			console.log("구조분해할당:"+subject+","+printout());
+			
+			//3.템플릿 리터럴
+			console.log(`구조분해할당:${subject},${printout()}`);
+		} //종료
+
+ 		
+		//2.객체 생성자함수 방식
+		document.getElementsByClassName("a")[1].onclick=()=>{
+			var info=new Info(); //객체 생성하기:new키워드 사용
+			console.log(info.subject);
+			console.log(info.getTest());
+			console.log(info.printout());
+		}
+		
+		// - 프로토타입 사용하기
+		document.getElementsByClassName("a")[2].onclick=()=>{
+			
+			//기존에 객체 기능 추가
+			//프로토타입에서 화살표 함수로 메서드를 할당하면 안된다 ->Info객체의 this를 가리키지 않음.
+			//생성자함수를 화살표함수로 정의하면 안된다. ->화살표함수는 prototype속성이 없음
+			Info.prototype.addFunc=function(){
+				//alert(`기능추가:${this.subject}`);
+				alert("기능추가:"+this.subject);
+			}
+			
+			var info = new Info(); //객체 생성
+			info.addFunc();
+		}
+		
+		//클로저 기능 실행하기
+		document.getElementsByClassName("a")[3].onclick=function(){
+//			closureTest()();
+//			var test = closureTest();
+//			test();
+
+			closureTest1();
+		}
+	}//onload종료
+	
+	function printCredit(func){
+		console.log(func()); //함수(기능)를 받아서 실행시킴
+	}
+	
+	//생성자 함수
+	function Info(){ //변수를 this로 선언하면 외부에서 접근 가능한데 var로 선언하면 외부에서 접근 불가
+		var test="html"
+		//변수 선언은 this키워드 사용
+		this.subject="javascript";
+		this.credit=2;
+		this.printout=function (){ //객체 안에서 정의할때는 익명함수로 정의, 화살표 함수는 X
+			return `${this.subject},${this.credit}학점`;
+		}
+		this.getTest=function (){ //메서드를 통해 var로 선언한 변수 접근 getter메서드
+			return test;
+		}
+	}
+	
+	//클로저:함수 내부에 함수를 구현하여 부모 함수에 정의된 지역변수에 접근할 수 맀는 함수(상태유지)
+	//var count=0; //전역변수-->여러함수에서 접근이 가능
+	
+	/*function closureTest(){
+		var count=0;//지역변수:함수내부에서만 사용 --> 상태를 유지 못함
+		count++;
+		console.log(count);
+	}*/
+	//클로저함수 만들기
+	function closureTest(){
+		var count=0;//지역변수:함수내부에서만 사용 --> 상태를 유지 못함
+		return function(){
+			count++;
+			console.log(count);		
+		}
+	}
+	
+	//클로저함수완성(찐 클로저 함수)
+	var closureTest1= function(){
+		var count=0;//지역변수:함수내부에서만 사용 --> 상태를 유지 못함
+		return function(){
+			count++;
+			console.log(count);		
+		}
+	}(); //부모함수를 실행시킴
+</script>
+</head>
+<body>
+<h1>선언적함수</h1>
+<p>이름이 정의되어 있는 기본적인 함수<button onclick="func01()">클릭</button></p>
+<h1>익명함수</h1>
+<p>이름이 없는 함수<button onclick="func02()">클릭</button></p>
+<h1>자바스크립트에서 객체 만들기</h1>
+<p class="a">1.객체 리터럴 방식</p>
+<p class="a">2.객체 생성자 함수방식</p>
+<p class="a"> - 프로토타입 사용하기</p>
+<p class="a"> - 클로저 사용하기</p>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

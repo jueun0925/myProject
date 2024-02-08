@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>js13_Date객체</title>
+<style type="text/css" >
+
+</style>
+<script type="text/javascript">
+	function testDate01(){
+		var date = new Date(); //defalt 생성자:오늘에 대한 날짜 정보를 가지고 있는 객체
+		var spanDate=document.getElementById("today");
+		spanDate.textContent=date.toLocaleString();
+	}
+	
+	function testDate02(){
+		var date=new Date();
+		var year=date.getFullYear();//오늘날짜에서 년도 정보를 가져옴
+		var month=date.getMonth()+1;//9월 -->8월이라 찍힘 : 0~11월 구성
+		var day=date.getDate();
+		var week=date.getDay(); //요일을 0~6의 정수 형태로 표현 //0:일 1:월 2:화 ...
+		var dayOfWeek=["일","월","화","수","목","금","토"];
+		
+		document.getElementById("today").textContent = `${year}/${month}/${day}/${dayOfWeek[week]}요일`;1
+	}
+	
+	function testDate03(){
+		//var date=new Date("2023-09-25");//날짜형식:2023-09-05 hh:mm:ss
+		var date=new Date(2023,9-1,25);//Date객체 는 0~11로 구성이라 9월 할거면 9-1이라고 해야됨
+		document.getElementById("specific").textContent=date.toLocaleDateString();
+	}
+	
+	function testDate04(){
+		//입력한 경과일
+		var inputDate=document.getElementById("inputDate").value;
+		var date= new Date();
+		//setDate():경과일만큼, 알아서 계산해서 날짜를 처리해줌
+		date.setDate(date.getDate()+parseInt(inputDate)); //입력받은 값은 문자열(텍스트) => 정수형으로 연산해야해서 partInt씀
+		console.log(date.toLocaleString());
+		document.getElementById("resultDate").value=date.toLocaleString();
+	}
+	
+	
+	onload=function(){
+		var date=new Date();
+		document.getElementById("dates").value=date.toLocaleString();
+		document.getElementById("dates2").value=date.toLocaleString();
+	}
+	
+	//현재날짜, 수료날짜 사이의 일수를 구함
+	//Date객체에 getTime()을 사용:1970년 1월 1일 기준으로~~new Date()까지의 경과 시간을 구함
+	//					반환값의 단위:ms단위 -->1초-->1000ms	
+	//					반환값(ms)  48시간/24(h) -->2일 -->24(h) -->ms단위로 환산
+	function testDate05(){
+		var date= new Date();
+		var afterDate=new Date(document.getElementById("d_day").value);//수료날짜객체
+		var period=afterDate.getTime()-date.getTime();
+		var periodD=period/(1000*60*60*24);
+		
+		document.getElementById("period").value=Math.ceil(periodD)+"일"; //math.ceil():올림
+	}
+	
+</script>
+</head>
+<body>
+<h1>오늘 날짜 출력하기</h1>
+<span id="today"></span><br/>
+<button onclick="testDate01()">오늘날짜</button>
+<button onclick="testDate02()">오늘날짜(표현방식설정)</button>
+
+<h1>특정 날짜 출력하기</h1>
+<span id="specific"></span><br/>
+<button onclick="testDate03()">특정날짜</button>
+
+<h1>경과 날짜 출력하기</h1>
+<label>현재날짜:</label><input type="text" id="dates" readonly/><br/><!--input은 innerHTML이나 textcontent 못씀 value써야함요-->
+<label>경과일:</label><input type="number" id="inputDate" min="1"/>일<br/>
+<label>경과 후 날짜:</label><input type="text" id="resultDate" readonly/>
+<button onclick="testDate04()">경과날짜</button>
+
+<h1>D-Day기능</h1>
+<label>현재날짜:</label><input type="text" id="dates2" readonly/><br/>
+<label>수료일</label><input type="date" id="d_day"/><br/>
+<label>남은 일수:</label><input type="text" id="period" readonly/>
+<button onclick="testDate05()">확인</button>
+</body>
+</html>

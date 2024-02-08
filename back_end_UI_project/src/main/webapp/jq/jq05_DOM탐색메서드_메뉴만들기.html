@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>jq05_DOM탐색메서드_메뉴만들기</title>
+<style type="text/css" >
+	.menu{
+		width: 120px;
+		background-color: lightblue;
+		position: absolute; /*absolute : 모든 요소가 (0,0)위치애서 시작 -> 위치 지정해줘야댐*/
+	}
+	#menu02{
+		left: 140px;
+	}
+	#menu03{
+		left: 270px;
+	}
+	div>a{ /*a태그는 인라인 요소 : 형태가 없음 그래서 높이 너비 설정 안됨 그래서 블록요소로 보이게 하고나서 너비높이 설정*/
+		text-decoration: none;
+		width: 120px;
+		height: 30px;
+		display: inline-block;
+		text-align: center; /*블럭요소는 텍스트 얼라인 안됨 =>마진이나 패딩 적용해서 해야됨 근데 이건 인라인요소라 ㄱㅊ*/
+		line-height: 30px;
+		font-weight: bold;
+		color: ghostwhite;
+	}
+	.menu>div{
+		display: none;
+	}
+
+</style>
+<script type="text/javascript" src="jquery_3.7.1.js"></script>
+<script type="text/javascript">
+	$(function(){
+		/*
+		$("a").mouseover(function(){
+			$(this).nextAll("div").css("display","block");
+		});
+		
+		$("a").mouseout(function(){
+			$(this).nextAll("div").css("display","none");
+		});
+		*/
+		
+		/*
+		//jquery는 hover메서드가 따로 있나봄
+		//$("a").hover(function(){//마우스 올라갔을때},function(){마우스 안올라가있을때}); 
+		$("a").hover(function(){
+			$(this).nextAll("div").css("display","block");
+		},function(){
+			$(this).nextAll("div").css("display","none");
+		});
+		*/
+		
+		//문제1. 마우스 올렸을떄 하위메뉴가 사라지는 현상을 해결해보자 ->타겟을 어디로 설정하느냐
+		//문제2.하위메뉴를 나타나고,사라지게할때 슬라이드 효과를 적용하여 구현
+		/*
+		$(".menu").hover(function(){
+			$(this).children("div").slideDown(1000);
+		},function(){
+			$(this).children("div").slideUp(100);
+		});	
+		*/
+		
+		//hover는 아규먼트 1개, 2개 ---> 1개의 경우는 마우스 오버/아웃할때 1개만 계속실행 // 
+		$(".menu").hover(function(){
+			//stop():앞에 적용된 여러 효과들을 정지시킨다
+			$(this).children("div").stop().slideToggle(500); //slideToggle이 안보일떈 보이게 내려주고, 보일떈 안보이게 올려주고 
+															//근데 마우스 5번 올리면 마우스를 땐 상태여도 지 속도대로 5번 움직임 =>stop().을 붙이면 됨
+		});	
+	});
+</script>
+</head>
+<body>
+<h1>메뉴만들기</h1>
+<div id="menu01" class="menu">
+	<a href="#">필터링메서드</a>
+	<div>.eq()</div>
+	<div>.slice()</div>
+	<div>.first()</div>
+	<div>.last()</div>
+</div>
+<div id="menu02" class="menu">
+	<a href="#">트리탐색메서드</a>
+	<div>.find()</div>
+	<div>.children()</div>
+	<div>.parent()</div>
+	<div>.prev()</div>
+	<div>.siblings()</div>
+</div>
+<div id="menu03" class="menu">
+	<a href="#">기타메서드</a>
+	<div>.add()</div>
+	<div>.is()</div>
+	<div>.end()</div>
+</div>
+</body>
+</html>

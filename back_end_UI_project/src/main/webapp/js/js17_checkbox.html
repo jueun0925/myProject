@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>js17_checkbox</title>
+<style type="text/css" >
+	#red,#yellow,#blue,#black{
+		width: 150px;
+		height: 150px;
+		border: 1px solid dimgray;
+		color: dimgray;
+		text-align: center;
+		line-height: 150px;
+		position: absolute;
+	}
+	
+	#yellow{
+		left: 160px;
+	}
+	#blue{
+		top: 160px;
+	}
+	#black{
+		top: 160px;
+		left: 160px;
+	}
+	#base{
+		position: absolute;
+		top: 320px;
+	}
+</style>
+<script type="text/javascript">
+	function allSel(chkAll){
+		//chkAll : 전체선택 체크박스 -->체크여부 구하기 : checked속성 : input요소의 속성임 ,체크여부를 true/false로 알려줌
+		var chks=document.getElementsByName("chk"); //[chk,chk,chk,chk]
+		for(var i=0;i<chks.length;i++){
+			//체크박스 각각에 대해 인덱스로 접근해서 체크여부 적용
+			chks[i].checked=chkAll.checked; //chkAll의 체크 상태를 따라가는듯요
+		}	
+	}
+	
+	//1번 문제 : 선택에 대한 유효값 처리 : "최소한 하나이상 체크하세요!" 라고 경고장 띄우기//에서 카운트 체크하는 함수
+	//재사용을 한다면.. 함수로 정의하자~ ==>체크개수를 반환하는 기능
+	function isCheck(chks){
+		var count=0;
+		for(var i=0;i<chks.length;i++){
+			if(chks[i].checked){ //체크여부판단//체크가된경우 true
+				count++;
+			}
+		}
+		return count;
+	}
+	function sel(){
+		//체크박스 여러개 탐색
+		var chks=document.getElementsByName("chk");
+		
+		//1번 문제 : 선택에 대한 유효값 처리 : "최소한 하나이상 체크하세요!" 라고 경고장 띄우기
+		var count=isCheck(chks); //isCheck함수 사용할떄
+		/* //isCheck함수 사용 안할떄
+		var count=0;
+		for(var i=0;i<chks.length;i++){
+			if(chks[i].checked){ //체크여부판단//체크가된경우 true
+				count++;
+			}
+		}
+		*/
+		
+		if(count==0||count==null){
+			alert("최소한 하나이상 체크하세요!");
+			clearDiv();
+		}else{
+			for(var i=0;i<chks.length;i++){
+				if(chks[i].checked){ //체크여부판단//체크가된경우 true
+					document.getElementById(chks[i].value).style.backgroundColor=chks[i].value;
+				}else{
+					document.getElementById(chks[i].value).style.backgroundColor="white";
+				}
+			}
+		}
+	}
+	
+	function clearDiv(){
+		/* 내가 짠거
+		document.getElementsByName("all")[0].checked="";
+		var chks=document.getElementsByName("chk");
+		for(var i=0;i<chks.length;i++){
+			//체크박스 각각에 대해 인덱스로 접근해서 체크여부 적용
+			chks[i].checked=document.getElementsByName("all")[0].checked; //chkAll의 체크 상태를 따라가는듯요
+			document.getElementById(chks[i].value).style.backgroundColor="white";
+		}
+		*/
+		
+		//4개의 박스 배경색 초기화
+		var divs=document.getElementsByTagName("div");
+		for(var i=0;i<divs.length;i++){
+			divs[i].style.backgroundColor="white";
+		}
+		//form요소 구성 : reset()		
+		//body속성 : document.body처럼 form도 document.forms[n] 가능, form이 여러개일수도 있어서 한개여도 배열로 작성 document.forms[0]
+		document.forms[0].reset(); //첫번재 form요소의 내부를 초기상태로 정의
+	}
+	
+	//2번 문제:전체선택 체크박스를 클릭한 후 나머지 박스 일부를 해제했을때 , 
+		//		전체선택박스도 해제되도록 구현
+		//		일부 박스를 체크했을때 모두 체크가 되는 경우면 전체 선택박스도 체크되도록 구현
+	onload=function(){
+		var chks=document.getElementsByName("chk");
+		
+		//for(var val in obj){}-->json객체 대상
+		//arrayObj.forEach(function(val){})-->Array객체 대상
+		//document.getElementsByName[i]이 배열은 약간 배열 짭이라 위에 for문 적용이 안되나봄 그냥 for(var i=0; i<4;i++)이런거 써야댐
+		
+		//4개의 체크박스의 체크여부의 개수를 구해서 총 체크박스의 개수와 비교
+		for(var i=0;i<chks.length;i++){
+			chks[i].onclick=function(){
+				//방법1
+				if(isCheck(chks)==chks.length){ //체크박스 총 개수==체크박스 카운트 //이게 true면 모두 체크됐단 뜻
+					document.getElementsByName("all")[0].checked=true;
+				}else{
+					document.getElementsByName("all")[0].checked=false;
+				}
+				
+				//방법2:css selector표현식으로 구하기
+				//document.querySelectorAll(css selector표현식)	
+				var checkObj=document.querySelectorAll("input[name=chk]:checked"); //check된 input요소만 구함
+				var count=(checkObj==null||checkObj==undefined)?0:checkObj.length; //체크된 개수를 구함	
+				console.log(count);
+			}//onclick종료
+		}//for문 종료
+		
+		
+		//document.querySelectorAll(css selector표현식)	
+		//var checkObj=document.querySelectorAll("input[name=chk]:cheked"); //check된 input요소만 구함
+		//var count=(checkObj==null||checkObj==undefined)?0:checkObj.length; //체크된 개수를 구함	
+		//console.log(count);
+	}
+</script>
+</head>
+<body>
+<div id="red">red</div>
+<div id="yellow">yellow</div>
+<div id="blue">blue</div>
+<div id="black">black</div>
+<div id="base">
+	<form action="" method="">
+		<input type="checkbox" name="all" onclick="allSel(this)" />전체선택<br/>
+		<input type="checkbox" name="chk" value="red" /><label>빨강</label><br/>
+		<input type="checkbox" name="chk" value="yellow" /><label>노랑</label><br/>
+		<input type="checkbox" name="chk" value="blue" /><label>파랑</label><br/>
+		<input type="checkbox" name="chk" value="black"/><label>검정</label><br/>
+		
+		<!--아마: 폼 요소 안에서 버튼 쓰면 기본이 submit으로 쓰여서 뭔가 전송되는 그런거라 버튼으로만 쓰고싶으면 type을 button으로 설정해놔야함-->
+		<button onclick="sel()" type="button">선택</button>  
+		<button onclick="clearDiv()" type="button">초기화</button>
+	</form>
+</div>
+</body>
+</html>
